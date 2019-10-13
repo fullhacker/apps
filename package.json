@@ -1,0 +1,22 @@
+{
+  "name": "fullhacker-games",
+  "version": "1.0.0",
+  "description": "Games by Full Hacker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullhacker/games.git"
+  },
+  "author": "Ayo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fullhacker/games/issues"
+  },
+  "homepage": "https://github.com/fullhacker/games#readme",
+  "devDependencies": {
+    "eslint": "^6.5.1"
+  }
+}
