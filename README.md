@@ -1,3 +1,3 @@
 # Full Hacker Games
 
-1. [Minesweeper](games.fullhacker.com/minesweeper)
+1. [Minesweeper](http://games.fullhacker.com/minesweeper)
