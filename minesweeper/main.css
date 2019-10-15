@@ -58,6 +58,17 @@ h1 {
     cursor: default;
 }
 
+div.hint-wrapper {
+  width: 500px;
+  margin: 0 auto;
+}
+
+span.hint,
+ol.instructions li {
+  font-size: small;
+  text-align: left !important;
+}
+
 button {
   margin: 12px;
 }
