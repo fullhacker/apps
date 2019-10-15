@@ -69,9 +69,14 @@ function revealMines(win) {
             if (isMine(cell)) {
                 cell.className= win ? 'flag' : 'mine';
             }
-            if (isFlagged(cell) && !isMine(cell)) {
-                cell.innerHTML = 'X'
-                cell.className = 'wrong';
+            if (isFlagged(cell)) {
+                if (!isMine(cell)) {
+                    cell.innerHTML = 'X'
+                    cell.className = 'wrong';
+                } else {
+                    cell.innerHTML = ':)'
+                    cell.className = 'correct';
+                }
             }
         }
     }
