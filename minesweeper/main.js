@@ -16,7 +16,7 @@ function generateGrid() {
         for (var j=0; j<10; j++) {
             var cell = row.insertCell(j);
             cell.onmouseup = function(e) {
-                console.log(e);
+                // console.log(e);
                 if (typeof e === 'object') {
                     switch (e.button) {
                         case 0: clickCell(this); break;
@@ -31,8 +31,8 @@ function generateGrid() {
             mine.value = "false";             
             cell.setAttributeNode(mine);
 
-            var flagged = document.createAttribute("data-flagged");       
-            flagged.value = "false";             
+            var flagged = document.createAttribute("data-status");       
+            flagged.value = "default";             
             cell.setAttributeNode(flagged);
         }
     }
@@ -73,31 +73,49 @@ function checkLevelCompletion() {
     }
 }
 
+function setStatus(cell, status) {
+    cell.setAttribute('data-status', status);
+}
+
+function getStatus(cell) {
+    return cell.getAttribute('data-status');
+}
+
 function middleClickCell(cell) {
-    console.log('middle click', cell);
+    if (getStatus(cell) === 'clicked') {
+        clickSurrounding(cell);
+        console.log('middle click', cell);
+    }
+}
+
+function clickSurrounding(cell) {
+
 }
 
 function rightClickCell(cell) {
-    if (cell.getAttribute('data-flagged')=="false") {
-        cell.className = 'flag';
-        cell.setAttribute('data-flagged', 'true');
-    } else {
-        cell.className = '';
-        cell.setAttribute('data-flagged', 'false');
+    if (getStatus(cell) != 'clicked') {
+        if (getStatus(cell) == 'default') {
+            cell.className = 'flag';
+            setStatus(cell, 'flagged');
+        } else {
+            cell.className = '';
+            setStatus(cell, 'default');
+        }
+        console.log('right click', cell);
     }
-
-    console.log('right click', cell);
 }
 
 function clickCell(cell) {
     //Check if the end-user clicked on a mine
-    if (cell.getAttribute('data-flagged')=="true") {
+    if (getStatus(cell) == 'flagged') {
         return;
     } else if (cell.getAttribute("data-mine")=="true") {
         revealMines();
         alert("Game Over");
     } else {
             cell.className="clicked";
+            setStatus(cell, 'clicked');
+            
             //Count and display the number of adjacent mines
             var mineCount=0;
             var cellRow = cell.parentNode.rowIndex;
