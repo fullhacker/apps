@@ -16,7 +16,5 @@
     "url": "https://github.com/fullhacker/games/issues"
   },
   "homepage": "https://github.com/fullhacker/games#readme",
-  "devDependencies": {
-    "eslint": "^6.5.1"
-  }
+  "devDependencies": {}
 }
