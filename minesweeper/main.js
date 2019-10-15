@@ -17,7 +17,13 @@ function generateGrid() {
             var cell = row.insertCell(j);
             cell.onmouseup = function(e) {
                 // console.log(e);
-                if (typeof e === 'object') {
+
+                // Set grid status to active on first click
+                if (grid.getAttribute('game-status') == 'inactive') {
+                    grid.setAttribute('game-status', 'active');
+                }
+
+                if (typeof e === 'object' && grid.getAttribute('game-status') == 'active') {
                     switch (e.button) {
                         case 0: clickCell(this); break;
                         case 1: middleClickCell(this); break;
@@ -36,6 +42,11 @@ function generateGrid() {
             cell.setAttributeNode(flagged);
         }
     }
+
+    var gameStatus = document.createAttribute('game-status');
+    gameStatus.value = 'inactive';
+    grid.setAttributeNode(gameStatus);
+
     addMines();
 }
 
@@ -62,6 +73,8 @@ function revealMines() {
             }
         }
     }
+
+    grid.setAttribute('game-status', 'over');
 }
 
 function isFlagged(cell) {
