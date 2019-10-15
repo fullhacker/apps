@@ -94,7 +94,18 @@ function getStatus(cell) {
 }
 
 function middleClickCell(cell) {
-    if (getStatus(cell) === 'clicked') {
+    // check for number of surrounding flags
+    var flagCount = 0;
+    var cellRow = cell.parentNode.rowIndex;
+    var cellCol = cell.cellIndex;
+    for (var i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+        for(var j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+            if (isFlagged(grid.rows[i].cells[j])) flagCount++;
+        }
+    }
+    var cellValue = parseInt(cell.innerHTML, 10);
+
+    if (getStatus(cell) === 'clicked' && flagCount === cellValue) {
         clickSurrounding(cell);
         console.log('middle click', cell);
     }
