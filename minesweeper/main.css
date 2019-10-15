@@ -59,6 +59,7 @@ h1 {
 
 div.hint-wrapper {
   max-width: 500px;
+  padding: 0 30px;
   margin: 0 auto 30px;
 }
 
