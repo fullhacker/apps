@@ -1,28 +1,35 @@
 /*
- initial code from: https://codepen.io/101Computing/pen/wEbEqx
- //minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
+ initial code was a  challenge from:
+ minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
 */
 
-document.addEventListener('DOMContentLoaded', function(event) {
-    var grid = document.getElementById("grid");
-    generateGrid();
-
-});
-
 var testMode = false; //Turn this variable to true to see where the mines are
+var grid = document.createElement('table'); // to declare varible grid as type HTMLTableElement and get proper intellisense
+grid = document.getElementById("grid");
+generateGrid();
 
 function generateGrid() {
     //generate 10 by 10 grid
     grid.innerHTML="";
     for (var i=0; i<10; i++) {
-        row = grid.insertRow(i);
+        var row = grid.insertRow(i);
         for (var j=0; j<10; j++) {
-        cell = row.insertCell(j);
-        cell.onclick = function() { clickCell(this); };
-        cell.oncontextmenu = function() { rightClickCell(this); };
-        var mine = document.createAttribute("data-mine");       
-        mine.value = "false";             
-        cell.setAttributeNode(mine);
+            var cell = row.insertCell(j);
+            cell.onclick = function(e) { 
+                if (e && (e.which == 2 || e.button == 1)) {
+                    console.log('middle clicked', this);
+                } else {
+                    clickCell(this);
+                }
+            };
+            cell.oncontextmenu = function() { rightClickCell(this); return false };
+            var mine = document.createAttribute("data-mine");       
+            mine.value = "false";             
+            cell.setAttributeNode(mine);
+
+            var flagged = document.createAttribute("data-flagged");       
+            flagged.value = "false";             
+            cell.setAttributeNode(flagged);
         }
     }
     addMines();
@@ -63,36 +70,48 @@ function checkLevelCompletion() {
 }
 
 function rightClickCell(cell) {
+    if (cell.getAttribute('data-flagged')=="false") {
+        cell.className = 'flag';
+        cell.setAttribute('data-flagged', 'true');
+    } else {
+        cell.className = '';
+        cell.setAttribute('data-flagged', 'false');
+    }
+
     console.log('right click', cell);
 }
 
 function clickCell(cell) {
     //Check if the end-user clicked on a mine
-    if (cell.getAttribute("data-mine")=="true") {
+    if (cell.getAttribute('data-flagged')=="true") {
+        return;
+    } else if (cell.getAttribute("data-mine")=="true") {
         revealMines();
         alert("Game Over");
     } else {
-        cell.className="clicked";
-        //Count and display the number of adjacent mines
-        var mineCount=0;
-        var cellRow = cell.parentNode.rowIndex;
-        var cellCol = cell.cellIndex;
-        //alert(cellRow + " " + cellCol);
-        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,9); i++) {
-        for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,9); j++) {
-            if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
-        }
-        }
-        cell.innerHTML=mineCount;
-        if (mineCount==0) { 
-        //Reveal all adjacent cells as they do not have a mine
-        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,9); i++) {
-            for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,9); j++) {
-            //Recursive Call
-            if (grid.rows[i].cells[j].innerHTML=="") clickCell(grid.rows[i].cells[j]);
+            cell.className="clicked";
+            //Count and display the number of adjacent mines
+            var mineCount=0;
+            var cellRow = cell.parentNode.rowIndex;
+            var cellCol = cell.cellIndex;
+            //alert(cellRow + " " + cellCol);
+            for (var i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+                for(var j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+                    if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
+                }
             }
-        }
-        }
+            cell.innerHTML = mineCount;
+            if (mineCount==0) { 
+                //Reveal all adjacent cells as they do not have a mine
+                for (var y = Math.max(cellRow-1,0); y <= Math.min(cellRow+1,9); y++) {
+                    for(var x = Math.max(cellCol-1,0); x <= Math.min(cellCol+1,9); x++) {
+                        //Recursive Call
+                        if (grid.rows[y].cells[x].innerHTML == "") {
+                            clickCell(grid.rows[y].cells[x]);
+                        }
+                    }
+                }
+            }
         checkLevelCompletion();
     }
 }

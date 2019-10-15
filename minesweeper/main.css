@@ -22,17 +22,22 @@ H1 {
 #grid TR TD{
   border:1px solid white;
   background: #999999;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   text-align: center;
 }
 
 #grid TR TD.clicked {
     background: #333333;
+    cursor: default;
 }
 
 #grid TR TD.mine {
     background: #FF0000;
+}
+
+#grid TR TD.flag {
+    background: #00FF00;
 }
 
 BUTTON {
