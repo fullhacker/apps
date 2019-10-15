@@ -61,12 +61,14 @@ function addMines() {
     }
 }
 
-function revealMines() {
+function revealMines(win) {
     //Highlight all mines in red
     for (var i=0; i<10; i++) {
         for(var j=0; j<10; j++) {
             var cell = grid.rows[i].cells[j];
-            if (isMine(cell)) cell.className="mine";
+            if (isMine(cell)) {
+                cell.className= win ? 'flag' : 'mine';
+            }
             if (isFlagged(cell) && !isMine(cell)) {
                 cell.innerHTML = 'X'
                 cell.className = 'wrong';
@@ -74,7 +76,7 @@ function revealMines() {
         }
     }
 
-    grid.setAttribute('game-status', 'over');
+    grid.setAttribute('game-status', win ? 'win' : 'over');
 }
 
 function isFlagged(cell) {
@@ -92,9 +94,9 @@ function checkLevelCompletion() {
             if ((grid.rows[i].cells[j].getAttribute("data-mine")=="false") && (grid.rows[i].cells[j].innerHTML=="")) levelComplete=false;
         }
     }
-    if (levelComplete) {
+    if (levelComplete && grid.getAttribute('game-status') == 'active') {
         alert("You Win!");
-        revealMines();
+        revealMines(true);
     }
 }
 
