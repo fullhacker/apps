@@ -47,6 +47,12 @@ h1 {
     color: #FF0000;
 }
 
+#grid TR TD.correct {
+    background: #00FF00;
+    color: #000000;
+}
+
+
 #grid TR TD.empty {
     background: #FFFFFF;
     cursor: default;
