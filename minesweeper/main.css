@@ -58,6 +58,15 @@ h1 {
     cursor: default;
 }
 
+div.hint-wrapper {
+  width: 500px;
+  margin: 0 auto;
+}
+
+span.hint {
+  font-size: small;
+}
+
 button {
   margin: 12px;
 }
