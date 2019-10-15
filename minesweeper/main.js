@@ -73,9 +73,15 @@ function revealMines(win) {
                 if (!isMine(cell)) {
                     cell.innerHTML = 'X'
                     cell.className = 'wrong';
+                    var wrong = document.createAttribute('title');
+                    wrong.value = 'Wrong';
+                    cell.setAttributeNode(wrong);
                 } else {
                     cell.innerHTML = ':)'
                     cell.className = 'correct';
+                    var correct = document.createAttribute('title');
+                    correct.value = 'Correct';
+                    cell.setAttributeNode(correct);
                 }
             }
         }
