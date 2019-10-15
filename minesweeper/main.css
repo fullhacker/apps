@@ -2,18 +2,19 @@
  initial code from: https://codepen.io/101Computing/pen/wEbEqx
 */
 
-BODY {
+body {
   background: black;
   color: #DDDDDD;
   font-family: courier new;
   text-align: center;
 }
 
-H1 {
+h1 {
   text-align: center;
   font-size: 14pt;
   font-weight: normal;
 }
+
 #grid {
   margin-left: auto;
   margin-right: auto;
@@ -22,6 +23,7 @@ H1 {
 #grid TR TD{
   border:1px solid white;
   background: #999999;
+  font-size: 11px;
   width: 18px;
   height: 18px;
   text-align: center;
@@ -45,7 +47,11 @@ H1 {
     color: #FF0000;
 }
 
-BUTTON {
-  margin: 12px;
+#grid TR TD.empty {
+    background: #FFFFFF;
+    cursor: default;
+}
 
+button {
+  margin: 12px;
 }

@@ -101,11 +101,18 @@ function middleClickCell(cell) {
 }
 
 function clickSurrounding(cell) {
-
+    var cellRow = cell.parentNode.rowIndex;
+    var cellCol = cell.cellIndex;
+    for (var i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+        for(var j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+            // if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
+            clickCell(grid.rows[i].cells[j]);
+        }
+    }
 }
 
 function rightClickCell(cell) {
-    if (getStatus(cell) != 'clicked') {
+    if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
         if (getStatus(cell) == 'default') {
             cell.className = 'flag';
             setStatus(cell, 'flagged');
@@ -138,8 +145,10 @@ function clickCell(cell) {
                     if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
                 }
             }
-            cell.innerHTML = mineCount;
             if (mineCount==0) { 
+                cell.innerHTML = 0;
+                cell.className = 'empty';
+                setStatus(cell, 'empty');
                 //Reveal all adjacent cells as they do not have a mine
                 for (var y = Math.max(cellRow-1,0); y <= Math.min(cellRow+1,9); y++) {
                     for(var x = Math.max(cellCol-1,0); x <= Math.min(cellCol+1,9); x++) {
@@ -149,6 +158,8 @@ function clickCell(cell) {
                         }
                     }
                 }
+            } else {
+                cell.innerHTML = mineCount;
             }
         checkLevelCompletion();
     }
