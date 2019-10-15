@@ -15,14 +15,18 @@ function generateGrid() {
         var row = grid.insertRow(i);
         for (var j=0; j<10; j++) {
             var cell = row.insertCell(j);
-            cell.onclick = function(e) { 
-                if (e && (e.which == 2 || e.button == 1)) {
-                    console.log('middle clicked', this);
-                } else {
-                    clickCell(this);
+            cell.onmouseup = function(e) {
+                console.log(e);
+                if (typeof e === 'object') {
+                    switch (e.button) {
+                        case 0: clickCell(this); break;
+                        case 1: middleClickCell(this); break;
+                        case 2: rightClickCell(this); break;
+                        default: console.error('What click was that???', e);
+                    }
                 }
-            };
-            cell.oncontextmenu = function() { rightClickCell(this); return false };
+            }
+            cell.oncontextmenu = () => false;
             var mine = document.createAttribute("data-mine");       
             mine.value = "false";             
             cell.setAttributeNode(mine);
@@ -67,6 +71,10 @@ function checkLevelCompletion() {
         alert("You Win!");
         revealMines();
     }
+}
+
+function middleClickCell(cell) {
+    console.log('middle click', cell);
 }
 
 function rightClickCell(cell) {
