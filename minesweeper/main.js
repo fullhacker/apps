@@ -53,11 +53,23 @@ function addMines() {
 function revealMines() {
     //Highlight all mines in red
     for (var i=0; i<10; i++) {
-    for(var j=0; j<10; j++) {
-        var cell = grid.rows[i].cells[j];
-        if (cell.getAttribute("data-mine")=="true") cell.className="mine";
+        for(var j=0; j<10; j++) {
+            var cell = grid.rows[i].cells[j];
+            if (isMine(cell)) cell.className="mine";
+            if (isFlagged(cell) && !isMine(cell)) {
+                cell.innerHTML = 'X'
+                cell.className = 'wrong';
+            }
+        }
     }
-    }
+}
+
+function isFlagged(cell) {
+    return getStatus(cell) == 'flagged';
+}
+
+function isMine(cell) {
+    return cell.getAttribute('data-mine') == 'true';
 }
 
 function checkLevelCompletion() {
