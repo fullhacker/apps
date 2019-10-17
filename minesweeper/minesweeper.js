@@ -13,7 +13,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         rightClickCell
     ];
 
-
     this.generateGrid = function() {
         //generate 10 by 10 grid
         grid.innerHTML="";
@@ -45,7 +44,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 grid.setAttribute('game-status', 'active');
             }
 
-            if (typeof e === 'object' && grid.getAttribute('game-status') == 'active') {
+            if (typeof e === 'object') {
                 callBackArray[e.button].call(_this, this);
             }
         }
