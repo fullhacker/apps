@@ -25,9 +25,9 @@ export const Minesweeper = function(_grid, testMode = false) {
                 mine.value = "false";             
                 cell.setAttributeNode(mine);
 
-                var flagged = document.createAttribute("data-status");       
-                flagged.value = "default";             
-                cell.setAttributeNode(flagged);
+                var status = document.createAttribute("data-status");       
+                status.value = "default";             
+                cell.setAttributeNode(status);
             }
         }
 
