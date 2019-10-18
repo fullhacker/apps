@@ -85,8 +85,8 @@ export const Minesweeper = function(_grid, testMode = false) {
         addMines(setting.mines);
     }
 
-    function updateFlagsCountDisplay() {
-        flagsCountDisplay.innerHTML = flagsCount;
+    function updateFlagsCountDisplay(count = flagsCount) {
+        flagsCountDisplay.innerHTML = count;
     }
 
     function initializeEventHandlers(cell) {
@@ -138,6 +138,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function handleWinRevelation(cell) {
+        updateFlagsCountDisplay(0);
         if (isMine(cell)) {
             cell.innerHTML = ':)'
             cell.className = 'correct';
