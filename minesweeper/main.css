@@ -38,6 +38,7 @@ h1 {
   height: 18px;
   text-align: center;
   cursor: default !important;
+  -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
 }
 
 #grid TR TD.clicked {

@@ -97,6 +97,9 @@ export const Minesweeper = function(_grid, testMode = false) {
             }
         }
         cell.oncontextmenu = () => false;
+        cell.onselectstart = () => false;
+        cell.onmousedown = () => false;
+        cell.setAttribute('unselectable', 'on');
     }
 
     function addMines(minesCount) {
