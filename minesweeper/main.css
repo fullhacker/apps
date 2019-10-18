@@ -2,7 +2,7 @@
  initial code from: https://codepen.io/101Computing/pen/wEbEqx
 */
 
-div.announcement {
+div#announcement-wrapper {
   background: green;
   padding: 5px;
   font-size: small;
