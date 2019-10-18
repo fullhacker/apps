@@ -186,7 +186,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         console.log('click', cell);
         if (getStatus(cell) == 'flagged') {
             return;
-        } else if (getStatus(cell) === 'clicked') {
+        } else if (getStatus(cell) == 'clicked') {
             middleClickCell(cell);
         } else {
             openCell(cell);

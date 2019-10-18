@@ -54,7 +54,7 @@ h1 {
 }
 
 #grid TR TD.wrong {
-    background: #FFFFFF;
+    background: orange;
     color: #FF0000;
 }
 
