@@ -4,49 +4,68 @@
 */
 
 export const Minesweeper = function(_grid, testMode = false) {
-    var grid = document.createElement('table');
+    let grid = document.createElement('table');
     grid = _grid;
     const _this = this;
-    var callBackArray = [
+    let callBackArray = [
         clickCell,
         middleClickCell,
         rightClickCell
     ];
-    var firstClick = true;
+    let firstClick = true;
+    const levels = {
+        beginner: {
+            rows: 9,
+            cols: 9,
+            mines: 10
+        },
+        intermediate: {
+            rows: 16,
+            cols: 16,
+            mines: 40
+        },
+        expert: {
+            rows: 16,
+            cols: 30,
+            mines: 99
+        }
+    }
+
+    let setting = levels.beginner;
 
     this.generateGrid = function() {
         //generate 10 by 10 grid
         firstClick = true;
         grid.innerHTML="";
-        for (var i=0; i<10; i++) {
-            var row = grid.insertRow(i);
-            for (var j=0; j<10; j++) {
-                var cell = row.insertCell(j);
+        for (let i = 0; i < setting.rows; i++) {
+            let row = grid.insertRow(i);
+            for (let j=0; j<setting.cols; j++) {
+                let cell = row.insertCell(j);
                 initializeEventHandlers(cell);
 
-                var dataCol = document.createAttribute('data-col');
+                let dataCol = document.createAttribute('data-col');
                 dataCol.value = '' + j;
                 cell.setAttributeNode(dataCol)
 
-                var dataRow = document.createAttribute('data-row');
+                let dataRow = document.createAttribute('data-row');
                 dataRow.value = '' + i;
                 cell.setAttributeNode(dataRow)
 
-                var mine = document.createAttribute("data-mine");       
+                let mine = document.createAttribute("data-mine");       
                 mine.value = "false";             
                 cell.setAttributeNode(mine);
 
-                var status = document.createAttribute("data-status");       
+                let status = document.createAttribute("data-status");       
                 status.value = "default";             
                 cell.setAttributeNode(status);
             }
         }
 
-        var gameStatus = document.createAttribute('game-status');
+        let gameStatus = document.createAttribute('game-status');
         gameStatus.value = 'inactive';
         grid.setAttributeNode(gameStatus);
 
-        addMines();
+        addMines(setting.mines);
     }
 
     function initializeEventHandlers(cell) {
@@ -59,12 +78,12 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.oncontextmenu = () => false;
     }
 
-    function addMines() {
+    function addMines(minesCount) {
         //Add mines randomly
-        for (var i=0; i<20; i++) {
-            var row = Math.floor(Math.random() * 10);
-            var col = Math.floor(Math.random() * 10);
-            var cell = grid.rows[row].cells[col];
+        for (let i=0; i<minesCount; i++) {
+            let row = Math.floor(Math.random() * setting.rows);
+            let col = Math.floor(Math.random() * setting.cols);
+            let cell = grid.rows[row].cells[col];
             if (isMine(cell)) {
                 transferMine();
             } else {
@@ -81,35 +100,49 @@ export const Minesweeper = function(_grid, testMode = false) {
 
     function revealMines() {
         //Highlight all mines in red
-        for (var i=0; i<10; i++) {
-            for(var j=0; j<10; j++) {
-                var cell = grid.rows[i].cells[j];
-                if (isMine(cell)) {
-                    cell.className= 'mine';
+        for (let i=0; i<setting.rows; i++) {
+            for(let j=0; j<setting.cols; j++) {
+                let cell = grid.rows[i].cells[j];
+                const win = grid.getAttribute('game-status') == 'win';
+                if (win) {
+                    handleWinRevelation(cell);
+                } else {
+                    handleLostRevelation(cell);
                 }
-                handleCellRevelation(cell);
             }
         }
     }
 
-    function handleCellRevelation(cell) {
+    function handleWinRevelation(cell) {
+        if (isMine(cell)) {
+            cell.innerHTML = ':)'
+            cell.className = 'correct';
+            let correct = document.createAttribute('title');
+            correct.value = 'Correct';
+            cell.setAttributeNode(correct)
+        }
+    }
+
+    function handleLostRevelation(cell) {
+        if (isMine(cell)) {
+            cell.className = 'mine';
+        }
         if (isFlagged(cell)) {
             cell.className = 'flag'
             if (!isMine(cell)) {
                 cell.innerHTML = 'X'
                 cell.className = 'wrong';
-                var wrong = document.createAttribute('title');
+                let wrong = document.createAttribute('title');
                 wrong.value = 'Wrong';
                 cell.setAttributeNode(wrong);
             } else {
                 cell.innerHTML = ':)'
                 cell.className = 'correct';
-                var correct = document.createAttribute('title');
+                let correct = document.createAttribute('title');
                 correct.value = 'Correct';
                 cell.setAttributeNode(correct);
             }
         }
-
     }
 
     function isOpen(cell) {
@@ -125,16 +158,16 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function checkLevelCompletion() {
-        var levelComplete = true;
-            for (var i=0; i<10; i++) {
-            for(var j=0; j<10; j++) {
+        let levelComplete = true;
+            for (let i=0; i<setting.rows; i++) {
+            for(let j=0; j<setting.cols; j++) {
                 if ((grid.rows[i].cells[j].getAttribute("data-mine")=="false") && (grid.rows[i].cells[j].innerHTML=="")) levelComplete=false;
             }
         }
         if (levelComplete && grid.getAttribute('game-status') == 'active') {
             alert("You Win!");
-            revealMines();
             grid.setAttribute('game-status', 'win');
+            revealMines();
         }
     }
 
@@ -160,8 +193,8 @@ export const Minesweeper = function(_grid, testMode = false) {
             return;
         }
         // check for number of surrounding flags
-        var cellValue = parseInt(cell.innerHTML, 10);
-        var flagCount = countFlagsAround(cell);
+        let cellValue = parseInt(cell.innerHTML, 10);
+        let flagCount = countFlagsAround(cell);
 
         if (flagCount === cellValue) {
             clickSurrounding(cell);
@@ -170,11 +203,11 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function countFlagsAround(cell) {
-        var flagCount = 0;
-        var cellRow = cell.parentNode.rowIndex;
-        var cellCol = cell.cellIndex;
-        for (var i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
-            for(var j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+        let flagCount = 0;
+        let cellRow = cell.parentNode.rowIndex;
+        let cellCol = cell.cellIndex;
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
                 if (isFlagged(grid.rows[i].cells[j])) flagCount++;
             }
         }
@@ -182,11 +215,11 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function clickSurrounding(cell) {
-        var cellRow = cell.parentNode.rowIndex;
-        var cellCol = cell.cellIndex;
-        for (var i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
-            for(var j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
-                var currentCell = grid.rows[i].cells[j];
+        let cellRow = cell.parentNode.rowIndex;
+        let cellCol = cell.cellIndex;
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+                let currentCell = grid.rows[i].cells[j];
                 if (getStatus(currentCell) == 'flagged') continue;
                 openCell(currentCell);
             }
@@ -224,13 +257,13 @@ export const Minesweeper = function(_grid, testMode = false) {
             printMines();
         }
 
-        openCell(cell, firstClick);
+        openCell(cell);
     }
 
     function printMines() {
-        var count = 0;
-        for (var i = 0; i < 10; i++) {
-            for (var j = 0; j < 10; j++) {
+        let count = 0;
+        for (let i = 0; i < setting.rows; i++) {
+            for (let j = 0; j < setting.cols; j++) {
                 if (isMine(grid.rows[i].cells[j])) console.log(count++ + ' - mine: [' + i + ',' + j + ']');
             }
         }
@@ -239,8 +272,8 @@ export const Minesweeper = function(_grid, testMode = false) {
     function transferMine(cell = undefined) {
         let found = false;
         do {
-            var row = Math.floor(Math.random() * 10);
-            var col = Math.floor(Math.random() * 10);
+            let row = Math.floor(Math.random() * setting.rows);
+            let col = Math.floor(Math.random() * setting.cols);
             const transferMineToCell = grid.rows[row].cells[col];
             if (isMine(transferMineToCell) || isNeighbor(cell, transferMineToCell)) {
                 continue;
@@ -267,13 +300,16 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function countMinesAround(cell) {
-        var mineCount=0;
-        var cellRow = cell.parentNode.rowIndex;
-        var cellCol = cell.cellIndex;
+        let mineCount=0;
+        let cellRow = cell.parentNode.rowIndex;
+        let cellCol = cell.cellIndex;
         //alert(cellRow + " " + cellCol);
-        for (var i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
-            for(var j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
-                if (isMine(grid.rows[i].cells[j])) {
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+            const rows = grid.rows[i];
+            if (!rows) continue;
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+                const cell = rows.cells[j]; 
+                if (cell && isMine(cell)) {
                     mineCount++;
                 }
             }
@@ -284,15 +320,17 @@ export const Minesweeper = function(_grid, testMode = false) {
     function handleEmpty(cell) {
         cell.innerHTML = 0;
         cell.className = 'empty';
-        var cellRow = cell.parentNode.rowIndex;
-        var cellCol = cell.cellIndex;
+        let cellRow = cell.parentNode.rowIndex;
+        let cellCol = cell.cellIndex;
         setStatus(cell, 'empty');
         //Reveal all adjacent cells as they do not have a mine
-        for (var y = Math.max(cellRow-1,0); y <= Math.min(cellRow+1,9); y++) {
-            for(var x = Math.max(cellCol-1,0); x <= Math.min(cellCol+1,9); x++) {
+        for (let y = Math.max(cellRow-1,0); y <= Math.min(cellRow+1,9); y++) {
+            const rows = grid.rows[y];
+            if (!rows) continue;
+            for(let x = Math.max(cellCol-1,0); x <= Math.min(cellCol+1,9); x++) {
                 //Recursive Call
-                const cell = grid.rows[y].cells[x];
-                if (!isOpen(cell)) {
+                const cell = rows.cells[x];
+                if (cell && !isOpen(cell)) {
                     clickCell(cell);
                 }
             }
