@@ -1,6 +1,8 @@
 /*
- initial code was a  challenge from:
- minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
+    Author: Ayo Ayco
+    Website: AyoAyco.com
+    Blog: FullHacker.com
+    Live: games.fullhacker.com/minesweeper
 */
 
 export const Minesweeper = function(_grid, testMode = false) {
