@@ -261,6 +261,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function rightClickCell(cell) {
+        if (grid.getAttribute('game-status') != 'active') return;
         if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
             if (getStatus(cell) == 'default') {
                 if (flagsCount <= 0) return;
