@@ -5,6 +5,8 @@
 
 export const Minesweeper = function(_grid, testMode = false) {
     let grid = document.createElement('table');
+    let flagsCountDisplay = document.createElement('span');
+    flagsCountDisplay = document.getElementById('flags-count');
     grid = _grid;
     const _this = this;
     let callBackArray = [
@@ -28,15 +30,27 @@ export const Minesweeper = function(_grid, testMode = false) {
             rows: 16,
             cols: 30,
             mines: 99
+        },
+        nightmare: {
+            rows: 20,
+            cols: 30,
+            mines: 150
         }
     }
 
-    let setting = levels.intermediate;
+    let setting = levels.beginner;
+    let flagsCount = setting.mines;
+
+    this.updateSetting = function(key){
+        setting = levels[key];
+        this.generateGrid();
+    }
 
     this.generateGrid = function() {
         //generate 10 by 10 grid
         firstClick = true;
         grid.innerHTML="";
+        flagsCount = setting.mines;
         for (let i = 0; i < setting.rows; i++) {
             let row = grid.insertRow(i);
             for (let j=0; j<setting.cols; j++) {
@@ -65,7 +79,12 @@ export const Minesweeper = function(_grid, testMode = false) {
         gameStatus.value = 'inactive';
         grid.setAttributeNode(gameStatus);
 
+        updateFlagsCountDisplay();
         addMines(setting.mines);
+    }
+
+    function updateFlagsCountDisplay() {
+        flagsCountDisplay.innerHTML = flagsCount;
     }
 
     function initializeEventHandlers(cell) {
@@ -226,13 +245,25 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
     }
 
+    function increaseFlagsCount() {
+        flagsCount++;
+        updateFlagsCountDisplay();
+    }
+
+    function decreaseFlagsCount() {
+        flagsCount--;
+        updateFlagsCountDisplay();
+    }
+
     function rightClickCell(cell) {
         if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
             if (getStatus(cell) == 'default') {
                 cell.className = 'flag';
+                decreaseFlagsCount();
                 setStatus(cell, 'flagged');
             } else {
                 cell.className = '';
+                increaseFlagsCount();
                 setStatus(cell, 'default');
             }
             console.log('right click', cell);

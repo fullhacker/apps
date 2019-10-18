@@ -29,9 +29,16 @@
         <button onclick="hideAnnouncement()">Close message</button>
     </div>
     <h1>Minesweeper (V0.1.6 Beta)</h1>
+    <span id="flags-count"></span>
     <table id=grid>
     </table>
     <button onclick="reset()">Reset Grid</button>
+    <select id="settingField" onchange="updateSetting()">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="expert">Expert</option>
+        <option value="nightmare">Nightmare</option>
+    </select>
     <div class="hint-wrapper">
         <h1>Instructions</h1>
         <ol class="instructions">
