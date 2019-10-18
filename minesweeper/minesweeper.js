@@ -237,7 +237,8 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function transferMine(cell = undefined) {
-        for (var i = 0; i < 100; i++) {
+        let found = false;
+        do {
             var row = Math.floor(Math.random() * 10);
             var col = Math.floor(Math.random() * 10);
             const transferMineToCell = grid.rows[row].cells[col];
@@ -249,9 +250,10 @@ export const Minesweeper = function(_grid, testMode = false) {
                     transferMineToCell.innerHTML = 'X';
                     console.log('transferred mine to: ' + row + ', ' + col);
                 }
+                found = true;
                 return;
             }
-        }
+        } while(!found)
     }
 
     function isNeighbor(cell, nextCell) {
