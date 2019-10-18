@@ -50,9 +50,11 @@ export const Minesweeper = function(_grid, testMode = false) {
         //generate 10 by 10 grid
         firstClick = true;
         grid.innerHTML="";
+        grid.oncontextmenu = () => false;
         flagsCount = setting.mines;
         for (let i = 0; i < setting.rows; i++) {
             let row = grid.insertRow(i);
+            row.oncontextmenu = () => false;
             for (let j=0; j<setting.cols; j++) {
                 let cell = row.insertCell(j);
                 initializeEventHandlers(cell);
