@@ -184,7 +184,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     function clickCell(cell) {
         //Check if the end-user clicked on a mine
         console.log('click', cell);
-        if (getStatus(cell) == 'flagged') {
+        if (getStatus(cell) == 'flagged' || grid.getAttribute('game-status') == 'over') {
             return;
         } else if (getStatus(cell) == 'clicked') {
             middleClickCell(cell);
@@ -233,6 +233,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         if (cell.getAttribute("data-mine")=="true") {
             revealMines();
             alert("Game Over");
+            grid.setAttribute('game-status', 'over');
         } else {
             const mineCount = countMinesAround(cell);
             if (mineCount==0) { 
