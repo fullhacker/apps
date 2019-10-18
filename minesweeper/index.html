@@ -24,14 +24,21 @@
 </head>
 <body>
     <div id="announcement-wrapper">
-        <p class="announcement-action">New in v0.1.6 Beta: First Click will never be a Mine!</p>
-        <p>Happy Sweeping!! :)</p>
+        <p class="announcement-action">New in v0.1.7 Beta: Pick from available difficulty levels!</p>
+        <p>Try Nightmare mode! Scared?! :)</p>
         <button onclick="hideAnnouncement()">Close message</button>
     </div>
-    <h1>Minesweeper (V0.1.6 Beta)</h1>
+    <h1>Minesweeper (V0.1.7 Beta)</h1>
+    <span id="flags-count"></span>
     <table id=grid>
     </table>
     <button onclick="reset()">Reset Grid</button>
+    <select id="settingField" onchange="updateSetting()">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="expert">Expert</option>
+        <option value="nightmare">Nightmare</option>
+    </select>
     <div class="hint-wrapper">
         <h1>Instructions</h1>
         <ol class="instructions">
