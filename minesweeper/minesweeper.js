@@ -189,7 +189,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             }
         }
         if (levelComplete && grid.getAttribute('game-status') == 'active') {
-            alert("You Win!");
+            // alert("You Win!");
             grid.setAttribute('game-status', 'win');
             revealMines();
         }
@@ -344,7 +344,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         let mineCount=0;
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
-        //alert(cellRow + " " + cellCol);
+        // alert(cellRow + " " + cellCol);
         for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,setting.rows-1); i++) {
             const rows = grid.rows[i];
             if (!rows) continue;
@@ -385,7 +385,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
         if (cell.getAttribute("data-mine")=="true") {
             revealMines();
-            alert("Game Over");
+            // alert("Game Over");
             grid.setAttribute('game-status', 'over');
         } else {
             const mineCount = countMinesAround(cell);
