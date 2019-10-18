@@ -8,6 +8,11 @@ div#announcement-wrapper {
   font-size: small;
 }
 
+p.announcement-action {
+  font-size: normal;
+  font-weight: bold;
+}
+
 body {
   background: black;
   color: #DDDDDD;
