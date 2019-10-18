@@ -90,7 +90,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function initializeEventHandlers(cell) {
-        cell.onmouseup = function(e) {        // Set grid status to active on first click
+        cell.onmousedown = function(e) {        // Set grid status to active on first click
 
             if (typeof e === 'object') {
                 callBackArray[e.button].call(_this, this);
@@ -98,7 +98,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         cell.oncontextmenu = () => false;
         cell.onselectstart = () => false;
-        cell.onmousedown = () => false;
         cell.setAttribute('unselectable', 'on');
     }
 
