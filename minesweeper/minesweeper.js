@@ -213,7 +213,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function middleClickCell(cell) {
-        if (getStatus(cell) !== 'clicked') {
+        if (grid.getAttribute('game-status') != 'active' || getStatus(cell) !== 'clicked') {
             return;
         }
         // check for number of surrounding flags
@@ -261,6 +261,9 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function rightClickCell(cell) {
+        if (grid.getAttribute('game-status') == 'inactive') {
+            grid.setAttribute('game-status', 'active');
+        }
         if (grid.getAttribute('game-status') != 'active') return;
         if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
             if (getStatus(cell) == 'default') {
@@ -281,7 +284,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         if (grid.getAttribute('game-status') == 'inactive') {
             grid.setAttribute('game-status', 'active');
         }
-
+        if (grid.getAttribute('game-status') != 'active') return;
         //Check if the end-user clicked on a mine
         console.log('click', cell);
         if (getStatus(cell) == 'flagged' || grid.getAttribute('game-status') == 'over') {
