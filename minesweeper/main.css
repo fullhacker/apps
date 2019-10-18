@@ -2,6 +2,12 @@
  initial code from: https://codepen.io/101Computing/pen/wEbEqx
 */
 
+div.announcement {
+  background: green;
+  padding: 5px;
+  font-size: small;
+}
+
 body {
   background: black;
   color: #DDDDDD;
