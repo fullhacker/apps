@@ -258,6 +258,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     function rightClickCell(cell) {
         if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
             if (getStatus(cell) == 'default') {
+                if (flagsCount <= 0) return;
                 cell.className = 'flag';
                 decreaseFlagsCount();
                 setStatus(cell, 'flagged');
