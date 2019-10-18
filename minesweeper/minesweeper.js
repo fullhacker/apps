@@ -70,25 +70,32 @@ export const Minesweeper = function(_grid, testMode = false) {
                 if (isMine(cell)) {
                     cell.className= win ? 'flag' : 'mine';
                 }
-                if (isFlagged(cell)) {
-                    if (!isMine(cell)) {
-                        cell.innerHTML = 'X'
-                        cell.className = 'wrong';
-                        var wrong = document.createAttribute('title');
-                        wrong.value = 'Wrong';
-                        cell.setAttributeNode(wrong);
-                    } else {
-                        cell.innerHTML = ':)'
-                        cell.className = 'correct';
-                        var correct = document.createAttribute('title');
-                        correct.value = 'Correct';
-                        cell.setAttributeNode(correct);
-                    }
-                }
+                handleCellRevelation(cell);
             }
         }
 
         grid.setAttribute('game-status', win ? 'win' : 'over');
+    }
+
+    function handleCellRevelation(cell) {
+        if (isFlagged(cell)) {
+            cell.className = 'flag'
+            if (!isMine(cell)) {
+                cell.className = 'mine'
+                cell.innerHTML = 'X'
+                cell.className = 'wrong';
+                var wrong = document.createAttribute('title');
+                wrong.value = 'Wrong';
+                cell.setAttributeNode(wrong);
+            } else {
+                cell.innerHTML = ':)'
+                cell.className = 'correct';
+                var correct = document.createAttribute('title');
+                correct.value = 'Correct';
+                cell.setAttributeNode(correct);
+            }
+        }
+
     }
 
     function isOpen(cell) {
