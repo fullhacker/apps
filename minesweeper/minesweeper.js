@@ -62,26 +62,23 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
     }
 
-    function revealMines(win) {
+    function revealMines() {
         //Highlight all mines in red
         for (var i=0; i<10; i++) {
             for(var j=0; j<10; j++) {
                 var cell = grid.rows[i].cells[j];
                 if (isMine(cell)) {
-                    cell.className= win ? 'flag' : 'mine';
+                    cell.className= 'mine';
                 }
                 handleCellRevelation(cell);
             }
         }
-
-        grid.setAttribute('game-status', win ? 'win' : 'over');
     }
 
     function handleCellRevelation(cell) {
         if (isFlagged(cell)) {
             cell.className = 'flag'
             if (!isMine(cell)) {
-                cell.className = 'mine'
                 cell.innerHTML = 'X'
                 cell.className = 'wrong';
                 var wrong = document.createAttribute('title');
@@ -119,7 +116,8 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         if (levelComplete && grid.getAttribute('game-status') == 'active') {
             alert("You Win!");
-            revealMines(true);
+            revealMines();
+            grid.setAttribute('game-status', 'win');
         }
     }
 
