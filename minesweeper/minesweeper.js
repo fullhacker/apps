@@ -31,7 +31,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
     }
 
-    let setting = levels.beginner;
+    let setting = levels.intermediate;
 
     this.generateGrid = function() {
         //generate 10 by 10 grid
@@ -206,8 +206,8 @@ export const Minesweeper = function(_grid, testMode = false) {
         let flagCount = 0;
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
-        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
-            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1, setting.rows - 1); i++) {
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1, setting.cols - 1); j++) {
                 if (isFlagged(grid.rows[i].cells[j])) flagCount++;
             }
         }
@@ -217,8 +217,8 @@ export const Minesweeper = function(_grid, testMode = false) {
     function clickSurrounding(cell) {
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
-        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
-            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1, setting.rows - 1); i++) {
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1, setting.cols - 1); j++) {
                 let currentCell = grid.rows[i].cells[j];
                 if (getStatus(currentCell) == 'flagged') continue;
                 openCell(currentCell);
@@ -304,10 +304,10 @@ export const Minesweeper = function(_grid, testMode = false) {
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
         //alert(cellRow + " " + cellCol);
-        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,9); i++) {
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,setting.rows-1); i++) {
             const rows = grid.rows[i];
             if (!rows) continue;
-            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,9); j++) {
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1,setting.cols-1); j++) {
                 const cell = rows.cells[j]; 
                 if (cell && isMine(cell)) {
                     mineCount++;
@@ -324,10 +324,10 @@ export const Minesweeper = function(_grid, testMode = false) {
         let cellCol = cell.cellIndex;
         setStatus(cell, 'empty');
         //Reveal all adjacent cells as they do not have a mine
-        for (let y = Math.max(cellRow-1,0); y <= Math.min(cellRow+1,9); y++) {
+        for (let y = Math.max(cellRow-1,0); y <= Math.min(cellRow+1, setting.rows - 1); y++) {
             const rows = grid.rows[y];
             if (!rows) continue;
-            for(let x = Math.max(cellCol-1,0); x <= Math.min(cellCol+1,9); x++) {
+            for(let x = Math.max(cellCol-1,0); x <= Math.min(cellCol+1, setting.cols - 1); x++) {
                 //Recursive Call
                 const cell = rows.cells[x];
                 if (cell && !isOpen(cell)) {
