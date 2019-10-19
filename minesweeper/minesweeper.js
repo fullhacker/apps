@@ -18,6 +18,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         rightClickCell
     ];
     let firstClick = true;
+    let isBusy = false;
     const levels = {
         beginner: {
             rows: 9,
@@ -88,15 +89,26 @@ export const Minesweeper = function(_grid, testMode = false) {
         addMines(setting.mines);
     }
 
+    function setBusy() {
+        isBusy = true;
+        setTimeout(() => isBusy = false, 500);
+    }
+
     function updateFlagsCountDisplay(count = flagsCount) {
         flagsCountDisplay.innerHTML = count;
     }
 
     function initializeEventHandlers(cell) {
-        cell.onmousedown = function(e) {        // Set grid status to active on first click
-
-            if (typeof e === 'object') {
+        cell.onmouseup = function(e) {        // Set grid status to active on first click
+            if (!isBusy && typeof e === 'object' && e.button != '2') {
                 callBackArray[e.button].call(_this, this);
+                setBusy();
+            }
+        }
+        cell.onmousedown = function(e) {
+            if (!isBusy && typeof e === 'object' && e.button == '2') {
+                callBackArray[e.button].call(_this, this);
+                setBusy();
             }
         }
         cell.oncontextmenu = () => false;
