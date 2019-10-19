@@ -263,6 +263,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function clickSurrounding(cell) {
+        if (grid.getAttribute('game-status') != 'active') return;
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
         for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1, setting.rows - 1); i++) {
@@ -405,6 +406,8 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function openCell(cell) {
+        if (grid.getAttribute('game-status') != 'active') return;
+
         cell.className="clicked";
         setStatus(cell, 'clicked');
         firstClick = false;
