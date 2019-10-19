@@ -29,28 +29,73 @@ h1 {
 #grid {
   margin-left: auto;
   margin-right: auto;
+  border-spacing: 0px;
+  border: 2px solid #ececec;
 }
 
 #grid TR TD{
-  background: #999999;
-  font-size: 11px;
-  width: 18px;
-  height: 18px;
+  padding: 0px;
+  width: 14px;
+  height: 14px;
+  font-size: x-small;
   text-align: center;
   cursor: default !important;
+  border: 1px solid #b0b0d0;
+  padding: 1px;
+  background: #c0c0d0;
   -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
 }
 
-#grid TR TD.clicked {
-    background: #333333;
+#grid TR TD[data-status=default],
+#grid TR TD[data-status=flagged] {
+  border: 2px outset #ececec;
+  padding: 0px;
+}
+
+/*
+#0000ff, #008100, #ff1300, #000083, #810500, #2a9494, #000000, #808080;
+*/
+
+#grid TR TD[data-value="1"] {
+    color: #0000ff !important;
+}
+
+#grid TR TD[data-value="2"] {
+    color: #008100;
+}
+
+#grid TR TD[data-value="3"] {
+    color: #ff1300;
+}
+
+#grid TR TD[data-value="4"] {
+    color: #000083;
+}
+
+#grid TR TD[data-value="5"] {
+    color: #810500;
+}
+
+#grid TR TD[data-value="6"] {
+    color: #2a9494;
+}
+
+#grid TR TD[data-value="7"] {
+    color: #000000;
+}
+
+#grid TR TD[data-value="8"] {
+    color: #808080;
 }
 
 #grid TR TD.mine {
-    background: #FF0000;
+    background: #dd5050;
+    border: 1px inset orange;
+    padding: 1px;
 }
 
 #grid TR TD.flag {
-    background: #00FF00;
+    background: #80d080;
 }
 
 #grid TR TD.wrong {
@@ -61,11 +106,6 @@ h1 {
 #grid TR TD.correct {
     background: #00FF00;
     color: #000000;
-}
-
-
-#grid TR TD.empty {
-    background: #FFFFFF;
 }
 
 div.hint-wrapper {

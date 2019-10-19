@@ -144,15 +144,18 @@ export const Minesweeper = function(_grid, testMode = false) {
         if (isMine(cell)) {
             cell.innerHTML = ':)'
             cell.className = 'correct';
+            setStatus(cell, 'clicked');
             let correct = document.createAttribute('title');
             correct.value = 'Correct';
             cell.setAttributeNode(correct)
+            setStatus(cell, 'clicked');
         }
     }
 
     function handleLostRevelation(cell) {
         if (isMine(cell)) {
             cell.className = 'mine';
+            setStatus(cell, 'clicked');
         }
         if (isFlagged(cell)) {
             cell.className = 'flag'
@@ -362,7 +365,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function handleEmpty(cell) {
-        cell.innerHTML = 0;
+        cell.innerHTML = ' ';
         cell.className = 'empty';
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
@@ -396,6 +399,9 @@ export const Minesweeper = function(_grid, testMode = false) {
                 handleEmpty(cell);
             } else {
                 cell.innerHTML = mineCount;
+                const dataValue = document.createAttribute('data-value');
+                dataValue.value = mineCount;
+                cell.setAttributeNode(dataValue);
             }
             //Count and display the number of adjacent mines
             checkLevelCompletion();
