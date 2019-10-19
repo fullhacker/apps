@@ -2,16 +2,6 @@
  initial code from: https://codepen.io/101Computing/pen/wEbEqx
 */
 
-div#announcement-wrapper {
-  background: green;
-  padding: 5px;
-  font-size: small;
-}
-
-p.announcement-action {
-  font-size: normal;
-  font-weight: bold;
-}
 
 body {
   background: black;
@@ -126,4 +116,56 @@ ol.instructions li {
 
 button {
   margin: 12px;
+}
+
+/* The Modal (background) */
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background: white;
+  margin: 5% auto 0; /* 15% from the top and centered */
+  padding: 20px;
+  border: 5px solid green;
+  width: 60%; /* Could be more or less, depending on screen size */
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  line-height: 36px!important;
+  color: #888;
+}
+
+.modal-btn {
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  line-height: 36px!important;
+  min-width: 150px;
+  display: inline-block!important;
+  background-color: #29abe0;
+  padding: 2px 12px !important;
+  text-align: center !important;
+  color: #fff;
+  cursor: pointer;
+  overflow-wrap: break-word;
+  vertical-align: middle;
+  border: 0 none #fff !important;
+  font-family: 'Quicksand',Helvetica,Century Gothic,sans-serif !important;
+  text-decoration: none;
+  text-shadow: none;
+  font-weight: 700!important;
+  font-size: 14px !important;
+}
+
+p.announcement-action {
+  font-size: normal;
+  font-weight: bold;
 }
