@@ -91,7 +91,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
     function setBusy() {
         isBusy = true;
-        setTimeout(() => isBusy = false, 500);
+        setTimeout(() => isBusy = false, 250);
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
@@ -102,13 +102,11 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmouseup = function(e) {        // Set grid status to active on first click
             if (!isBusy && typeof e === 'object' && e.button != '2') {
                 callBackArray[e.button].call(_this, this);
-                setBusy();
             }
         }
         cell.onmousedown = function(e) {
             if (!isBusy && typeof e === 'object' && e.button == '2') {
                 callBackArray[e.button].call(_this, this);
-                setBusy();
             }
         }
         cell.oncontextmenu = () => false;
@@ -280,6 +278,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function rightClickCell(cell) {
+        if (isFlagged(cell)) setBusy();
         if (grid.getAttribute('game-status') == 'inactive') {
             grid.setAttribute('game-status', 'active');
         }
@@ -300,6 +299,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function clickCell(cell) {
+        if (isFlagged(cell)) setBusy;
         if (grid.getAttribute('game-status') == 'inactive') {
             grid.setAttribute('game-status', 'active');
         }
