@@ -38,6 +38,7 @@ h1 {
   width: 14px;
   height: 14px;
   font-size: x-small;
+  font-weight: bold;
   text-align: center;
   cursor: default !important;
   border: 1px solid #b0b0d0;
