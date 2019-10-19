@@ -95,7 +95,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
-        flagsCountDisplay.innerHTML = count;
+        flagsCountDisplay.innerHTML = 'Flags left:' + count;
     }
 
     function initializeEventHandlers(cell) {
