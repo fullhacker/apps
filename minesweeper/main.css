@@ -42,16 +42,22 @@ h1 {
   font-weight: bold;
   text-align: center;
   cursor: default !important;
-  border: 1px solid #c0e0d0;
-  padding: 1px;
+  border: 1px inset #c0e0d0;
+  padding: 0px;
   background: #c0d0c0;
   -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
 }
 
 #grid TR TD[data-status=default],
 #grid TR TD[data-status=flagged] {
-  border: 2px outset #ececec;
+  border: 1px outset #ececec;
   padding: 0px;
+}
+
+#grid TR TD.mine {
+    background: #dd5050;
+    border: 1px inset orange;
+    padding: 0px;
 }
 
 /*
@@ -90,11 +96,6 @@ h1 {
     color: #808080;
 }
 
-#grid TR TD.mine {
-    background: #dd5050;
-    border: 1px inset orange;
-    padding: 1px;
-}
 
 #grid TR TD.flag {
     background: #80d080;
@@ -106,7 +107,8 @@ h1 {
 }
 
 #grid TR TD.correct {
-    background: #00FF00;
+    background: #00FF00 !important;
+    font-size: xx-small;
     color: #000000;
 }
 

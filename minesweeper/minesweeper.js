@@ -135,6 +135,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function revealMines() {
+        if (grid.getAttribute('game-status') == 'done') return;
         //Highlight all mines in red
         for (let i=0; i<setting.rows; i++) {
             for(let j=0; j<setting.cols; j++) {
@@ -147,6 +148,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 }
             }
         }
+        grid.setAttribute('game-status', 'done');
     }
 
     function handleWinRevelation(cell) {
