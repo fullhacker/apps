@@ -153,10 +153,6 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function handleLostRevelation(cell) {
-        if (isMine(cell)) {
-            cell.className = 'mine';
-            setStatus(cell, 'clicked');
-        }
         if (isFlagged(cell)) {
             cell.className = 'flag'
             if (!isMine(cell)) {
@@ -171,6 +167,11 @@ export const Minesweeper = function(_grid, testMode = false) {
                 let correct = document.createAttribute('title');
                 correct.value = 'Correct';
                 cell.setAttributeNode(correct);
+            }
+        } else {
+            if (isMine(cell)) {
+                cell.className = 'mine';
+                setStatus(cell, 'clicked');
             }
         }
     }
