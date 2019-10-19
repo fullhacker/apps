@@ -241,7 +241,8 @@ export const Minesweeper = function(_grid, testMode = false) {
             return;
         }
         // check for number of surrounding flags
-        let cellValue = parseInt(cell.innerHTML, 10);
+        const valueString = cell.getAttribute('data-value');
+        let cellValue = parseInt(valueString, 10);
         let flagCount = countFlagsAround(cell);
 
         if (flagCount === cellValue) {
@@ -421,7 +422,10 @@ export const Minesweeper = function(_grid, testMode = false) {
             if (mineCount==0) { 
                 handleEmpty(cell);
             } else {
-                cell.innerHTML = mineCount;
+                cell.innerHTML = '';
+                const spanMineCount = document.createElement('span');
+                spanMineCount.appendChild(document.createTextNode(mineCount));
+                cell.appendChild(spanMineCount);
                 const dataValue = document.createAttribute('data-value');
                 dataValue.value = mineCount;
                 cell.setAttributeNode(dataValue);

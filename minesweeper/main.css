@@ -23,6 +23,12 @@ h1 {
   border: 2px solid #ececec;
 }
 
+#grid tr td span {
+  font-size: 16px;
+  position: absolute;
+  margin: -8px 0 0 -4px;
+}
+
 #grid TR TD{
   width: 14px;
   height: 14px;
