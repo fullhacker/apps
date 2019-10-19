@@ -37,13 +37,15 @@ h1 {
   padding: 0px;
   width: 14px;
   height: 14px;
+  max-width: 14px;
+  max-height: 14px;
   font-size: x-small;
   font-weight: bold;
   text-align: center;
   cursor: default !important;
-  border: 1px solid #b0b0d0;
+  border: 1px solid #c0e0d0;
   padding: 1px;
-  background: #c0c0d0;
+  background: #c0d0c0;
   -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
 }
 
