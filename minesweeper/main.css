@@ -24,9 +24,10 @@ h1 {
 }
 
 #grid tr td span {
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: bold;
   position: absolute;
-  margin: -8px 0 0 -4px;
+  margin: -7px 0 0 -3.5px;
 }
 
 #grid TR TD{
@@ -34,8 +35,8 @@ h1 {
   height: 14px;
   max-width: 14px;
   max-height: 14px;
-  font-size: x-small;
-  font-weight: bold;
+  min-width: 14px;
+  min-height: 14px;
   text-align: center;
   cursor: default !important;
   padding: 0px;
