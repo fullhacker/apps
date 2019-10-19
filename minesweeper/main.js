@@ -15,6 +15,6 @@ window.reset = function() {
  myMinesweeper.generateGrid();
 }
 window.hideAnnouncement = function() {
-    document.getElementById('announcement-wrapper').style.display = 'none';
+    document.getElementById('message-modal').style.display = 'none';
 }
 myMinesweeper.generateGrid();
