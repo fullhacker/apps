@@ -32,9 +32,9 @@ h1 {
   font-weight: bold;
   text-align: center;
   cursor: default !important;
-  border: 1px inset #c0e0d0;
   padding: 0px;
   background: #c0d0c0;
+  border: 1px inset #c0e0d0;
   -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
 }
 
@@ -133,10 +133,10 @@ button {
 
 /* Modal Content/Box */
 .modal-content {
-  background: white;
+  background: #efffef;
   margin: 5% auto 0; /* 15% from the top and centered */
   padding: 20px;
-  border: 5px solid green;
+  border: 5px solid #c0e0d0;
   width: 60%; /* Could be more or less, depending on screen size */
   box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
   border-radius: 7px;
