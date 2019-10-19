@@ -95,7 +95,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
-        flagsCountDisplay.innerHTML = count;
+        flagsCountDisplay.innerHTML = 'Flags left:' + count;
     }
 
     function initializeEventHandlers(cell) {
@@ -173,7 +173,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         if (isFlagged(cell)) {
             cell.className = 'flag'
             if (!isMine(cell)) {
-                cell.innerHTML = 'X'
+                cell.innerHTML = 'X';
                 cell.className = 'wrong';
                 let wrong = document.createAttribute('title');
                 wrong.value = 'Wrong';
@@ -241,7 +241,8 @@ export const Minesweeper = function(_grid, testMode = false) {
             return;
         }
         // check for number of surrounding flags
-        let cellValue = parseInt(cell.innerHTML, 10);
+        const valueString = cell.getAttribute('data-value');
+        let cellValue = parseInt(valueString, 10);
         let flagCount = countFlagsAround(cell);
 
         if (flagCount === cellValue) {
@@ -385,8 +386,15 @@ export const Minesweeper = function(_grid, testMode = false) {
         return mineCount;
     }
 
+    function updateCellValue(cell, value) {
+        const spanElement = document.createElement('span');
+        spanElement.innerHTML = value;
+        cell.innerHTML = '';
+        cell.appendChild(spanElement);
+    }
+
     function handleEmpty(cell) {
-        cell.innerHTML = ' ';
+        updateCellValue(cell, ' ');
         cell.className = 'empty';
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
@@ -421,7 +429,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             if (mineCount==0) { 
                 handleEmpty(cell);
             } else {
-                cell.innerHTML = mineCount;
+                updateCellValue(cell, mineCount.toString());
                 const dataValue = document.createAttribute('data-value');
                 dataValue.value = mineCount;
                 cell.setAttributeNode(dataValue);
