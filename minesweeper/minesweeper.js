@@ -323,7 +323,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         } else if (isMine(cell) && firstClick) {
             cell.setAttribute('data-mine', 'false');
             transferMine(cell);
-            printMines();
+            if (testMode) printMines();
         }
 
         openCell(cell);
