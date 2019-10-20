@@ -181,3 +181,7 @@ p.announcement-action {
   font-size: normal;
   font-weight: bold;
 }
+
+span#flags-count{
+  cursor: pointer;
+}
