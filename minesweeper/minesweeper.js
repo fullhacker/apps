@@ -8,15 +8,25 @@
 
 export const Minesweeper = function(_grid, testMode = false) {
     let grid = document.createElement('table');
-    let flagsCountDisplay = document.createElement('span');
-    flagsCountDisplay = document.getElementById('flags-count');
+    let flagsDisplay = document.createElement('span');
+    flagsDisplay = document.getElementById('flags-count');
     grid = _grid;
     const _this = this;
-    let callBackArray = [
+    let isLeft = false;
+    let isRight = false;
+    let pressed = undefined;
+    let bothPressed = undefined;
+    let skip = false;
+    let skipCondition = false;
+    let mouseUpCallBackArray = [
         clickCell,
         middleClickCell,
-        rightClickCell
     ];
+    let mouseDownCallBackArray = [
+        highlightCell, // left-click down
+        highlightSurroundingCell, // middle-click down
+        rightClickCell // right-click down
+    ]
     let firstClick = true;
     let isBusy = false;
     const levels = {
@@ -95,25 +105,126 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
-        flagsCountDisplay.innerHTML = 'Flags left:' + count;
+        flagsDisplay.innerHTML = 'Flags left:' + count;
     }
 
-    function initializeEventHandlers(cell) {
+    function initializeEventHandlers(_cell) {
+
+        let cell = document.createElement('td');
+        cell = _cell;
+        isLeft = false;
+        isRight = false;
+        pressed = undefined;
+        bothPressed = undefined;
+        skip = false;
+        skipCondition = false;
+
         document.onkeydown = function(e) {
             if (e.keyCode == 32) {
                 _this.generateGrid();
             }
         }
+
+        grid.onmouseleave = function() {
+            removeHighlights();
+        }
+        document.oncontextmenu = () => false;
+        document.onmouseup = function() {
+            pressed = undefined;
+            bothPressed = undefined;
+            isLeft = false;
+            isRight = false;
+        }
+        document.onmousedown = function(e) {
+            switch (e.button) {
+                case 0: pressed = 'left'; isLeft = true; break;
+                case 1: pressed = 'middle'; break;
+                case 2: isRight = true; break;
+                default: pressed = undefined; break;
+            }
+        }
+
         cell.onmouseup = function(e) {        // Set grid status to active on first click
+            pressed = undefined;
+            let dont = false;
+
+            if (bothPressed) {
+                bothPressed = false;
+                if (e.button == '2') {
+                    skipCondition = true;
+                } else if (e.button == '0') {
+                    dont = true;
+                }
+                if (getStatus(this) == 'clicked') {
+                    middleClickCell(this);
+                    return;
+                }
+            }
+            switch(e.button) {
+                case 0: {
+                    isLeft = false;
+                    if (skipCondition) {
+                        skip = true;
+                    }
+                    break;
+                }
+                case 2: isRight = false; break
+            }
+            removeHighlights();
+            if (skip || dont) {
+                skip = false;
+                skipCondition = false;
+                return;
+            }
             if (!isBusy && typeof e === 'object' && e.button != '2') {
-                callBackArray[e.button].call(_this, this);
+                mouseUpCallBackArray[e.button].call(_this, this);
             }
         }
+
         cell.onmousedown = function(e) {
-            if (!isBusy && typeof e === 'object' && e.button == '2') {
-                callBackArray[e.button].call(_this, this);
+            if (!isBusy && typeof e === 'object') {
+                switch(e.button) {
+                    case 0: isLeft = true; break;
+                    case 2: isRight = true; break
+                }
+
+                if (isLeft && isRight) {
+                    bothPressed = true;
+                    highlightSurroundingCell(this);
+                    return;
+                }
+
+                if (e.button == '1') {
+                    pressed = 'middle';
+                    highlightSurroundingCell(this);
+                } else if (e.button == '0') {
+                    pressed = 'left';
+                    if (getStatus(this) == 'clicked') {
+                        highlightSurroundingCell(this);
+                    } else {
+                        highlightCell(this);
+                    }
+                }
+
+                if (e.button == '2') mouseDownCallBackArray[e.button].call(_this, this);
             }
         }
+
+        cell.onmousemove = function(e) {
+            if ((pressed || bothPressed) && typeof e === 'object') {
+                removeHighlights();
+                if (pressed == 'middle' || (isLeft && isRight)) {
+                    highlightSurroundingCell(this);
+                } else if (pressed == 'left') {
+                    if (getStatus(this) == 'clicked') {
+                        highlightSurroundingCell(this);
+                    } else {
+                        highlightCell(this);
+                    }
+                }
+            }
+        }
+
         cell.oncontextmenu = () => false;
         cell.onselectstart = () => false;
         cell.setAttribute('unselectable', 'on');
@@ -286,10 +397,45 @@ export const Minesweeper = function(_grid, testMode = false) {
         updateFlagsCountDisplay();
     }
 
+    function activateGame() {
+        grid.setAttribute('game-status', 'active');
+    }
+
+    function gameIsDone() {
+        return grid.getAttribute('game-status') == 'over' || grid.getAttribute('game-status') == 'done';
+    }
+
+    function removeHighlights() {
+        for (let i=0; i<setting.rows; i++) {
+            for(let j=0; j<setting.cols; j++) {
+                let currentCell = grid.rows[i].cells[j];
+                if (getStatus(currentCell) == 'highlighted') setStatus(currentCell, 'default');
+            }
+        }
+    }
+
+    function highlightCell(cell) {
+        if (isFlagged(cell)) return;
+        if (!gameIsDone() && getStatus(cell) == 'default') setStatus(cell, 'highlighted'); // currentCell.classList.add('highlight');
+    }
+
+    function highlightSurroundingCell(cell) {
+        let cellRow = cell.parentNode.rowIndex;
+        let cellCol = cell.cellIndex;
+
+        highlightCell(cell);
+        for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1, setting.rows - 1); i++) {
+            for(let j = Math.max(cellCol-1,0); j <= Math.min(cellCol+1, setting.cols - 1); j++) {
+                let currentCell = grid.rows[i].cells[j];
+                highlightCell(currentCell);
+            }
+        }
+    }
+
     function rightClickCell(cell) {
         if (isFlagged(cell)) setBusy();
         if (grid.getAttribute('game-status') == 'inactive') {
-            grid.setAttribute('game-status', 'active');
+            activateGame();
         }
         if (grid.getAttribute('game-status') != 'active') return;
         if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
@@ -308,9 +454,9 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function clickCell(cell) {
-        if (isFlagged(cell)) setBusy;
+        if (isFlagged(cell)) setBusy();
         if (grid.getAttribute('game-status') == 'inactive') {
-            grid.setAttribute('game-status', 'active');
+            activateGame();
         }
         if (grid.getAttribute('game-status') != 'active') return;
         //Check if the end-user clicked on a mine
