@@ -1,3 +1,4 @@
+import { LocalStorageService } from '../services/localstorage.service.js';
 /*
     Author: Ayo Ayco
     Email: ramon.aycojr@gmail.com
@@ -7,6 +8,7 @@
 */
 
 export const Minesweeper = function(_grid, testMode = false) {
+    let localStorageService = new LocalStorageService();
     let grid = document.createElement('table');
     let flagsDisplay = document.createElement('span');
     flagsDisplay = document.getElementById('flags-count');
@@ -52,11 +54,14 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
     }
 
-    let setting = levels.beginner;
+    let cachedSetting = localStorageService.getFromLocalStorage('setting');
+    let setting = cachedSetting || levels.beginner;
+    localStorageService.saveToLocalStorage('setting', setting);
     let flagsCount = setting.mines;
 
     this.updateSetting = function(key){
         setting = levels[key];
+        localStorageService.saveToLocalStorage('setting', setting);
         this.generateGrid();
     }
 
