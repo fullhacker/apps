@@ -105,7 +105,12 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
-        flagsDisplay.innerHTML = 'Flags left:' + count;
+        if (grid.getAttribute('game-status') != 'win') {
+            flagsDisplay.innerHTML = 'Flags left:' + count;
+            return;
+        }
+
+        flagsDisplay.innerHTML = '&#128513;';
     }
 
     function initializeEventHandlers(_cell) {
@@ -569,6 +574,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         if (cell.getAttribute("data-mine")=="true") {
             revealMines();
             // alert("Game Over");
+            flagsDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
             const mineCount = countMinesAround(cell);
