@@ -6,7 +6,7 @@ grid = document.getElementById("grid");
 var myMinesweeper = new Minesweeper(grid, testMode);
 window.updateSetting = function() {
     let settingField = document.createElement('select');
-    settingField = document.getElementById('settingField');
+    settingField = document.getElementById('setting-field');
     const settingKey = settingField.options[settingField.selectedIndex].value;
     console.log('updating settings: ' + settingKey);
     myMinesweeper.updateSetting(settingKey);
