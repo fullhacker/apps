@@ -130,17 +130,20 @@ export const Minesweeper = function(_grid, testMode = false) {
 
         let cell = document.createElement('td');
         cell = _cell;
-        isLeft = false;
-        isRight = false;
-        pressed = undefined;
-        bothPressed = undefined;
         skip = false;
         skipCondition = false;
+
+        resetMouseEventFlags();
 
         document.onkeydown = function(e) {
             if (e.keyCode == 32) {
                 _this.generateGrid();
             }
+            resetMouseEventFlags();
+        }
+
+        window.onblur = function() {
+            resetMouseEventFlags();
         }
 
         grid.onmouseleave = function() {
@@ -148,17 +151,13 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         document.oncontextmenu = () => false;
         document.onmouseup = function() {
-            pressed = undefined;
-            bothPressed = undefined;
-            isLeft = false;
-            isRight = false;
+            resetMouseEventFlags();
         }
         document.onmousedown = function(e) {
             switch (e.button) {
                 case 0: pressed = 'left'; isLeft = true; break;
                 case 1: pressed = 'middle'; break;
                 case 2: isRight = true; break;
-                default: pressed = undefined; break;
             }
         }
 
@@ -200,6 +199,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
 
         cell.onmousedown = function(e) {
+            skip = false;
             if (!isBusy && typeof e === 'object') {
                 switch(e.button) {
                     case 0: isLeft = true; break;
@@ -246,6 +246,14 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.oncontextmenu = () => false;
         cell.onselectstart = () => false;
         cell.setAttribute('unselectable', 'on');
+    }
+
+    function resetMouseEventFlags() {
+            pressed = undefined;
+            bothPressed = undefined;
+            isLeft = false;
+            isRight = false;
+            skip = true;
     }
 
     function addMines(minesCount) {
