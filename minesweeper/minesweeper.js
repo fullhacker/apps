@@ -253,6 +253,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             bothPressed = undefined;
             isLeft = false;
             isRight = false;
+            removeHighlights();
             skip = true;
     }
 
@@ -433,6 +434,8 @@ export const Minesweeper = function(_grid, testMode = false) {
 
     function removeHighlights() {
         for (let i=0; i<setting.rows; i++) {
+            const rows = grid.rows[i];
+            if (!rows) continue;
             for(let j=0; j<setting.cols; j++) {
                 let currentCell = grid.rows[i].cells[j];
                 if (getStatus(currentCell) == 'highlighted') setStatus(currentCell, 'default');
