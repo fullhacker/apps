@@ -34,15 +34,23 @@
     </div-->
 
     <h1>Minesweeper v0.1.13.2 Beta</h1>
-    <span onclick="reset()" id="flags-count"></span>
+
+    <div id="flags-count-wrapper">
+        <span onclick="reset()" id="flags-count"></span>
+    </div>
+
     <table id=grid></table>
-    <button id="reset-btn" onclick="reset()">Reset Grid [Press Space]</button>
-    <select id="setting-field" onchange="updateSetting()">
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="expert">Expert</option>
-        <option value="nightmare">Nightmare</option>
-    </select>
+
+    <div id="toolbar-wrapper">
+        <button id="reset-btn" onclick="reset()">Reset Grid [Press Space]</button>
+        <select id="setting-field" onchange="updateSetting()">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+            <option value="nightmare">Nightmare</option>
+        </select>
+    </div>
+
     <div class="hint-wrapper">
         <h1>Instructions</h1>
         <ol class="instructions">
