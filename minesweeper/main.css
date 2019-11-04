@@ -186,7 +186,8 @@ span#flags-count{
   cursor: pointer;
 }
 
+
 div#flags-count-wrapper,
 div#toolbar-wrapper {
-  height: 30px;
+  height: 20px;
 }
