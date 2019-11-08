@@ -161,7 +161,8 @@ export const Minesweeper = function(_grid, testMode = false) {
             }
         }
 
-        cell.onmouseup = function(e) {        // Set grid status to active on first click
+        // Set grid status to active on first click
+        cell.onmouseup = function(e) {        
             pressed = undefined;
             let dont = false;
 

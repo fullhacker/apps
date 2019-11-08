@@ -17,5 +17,7 @@
     "url": "https://github.com/fullhacker/games/issues"
   },
   "homepage": "https://github.com/fullhacker/games#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
 }
