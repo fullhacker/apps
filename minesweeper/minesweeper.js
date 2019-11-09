@@ -111,7 +111,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
     function setBusy() {
         isBusy = true;
-        setTimeout(() => isBusy = false, 250);
+        setTimeout(() => isBusy = false, 500);
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
@@ -295,6 +295,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         setTimeout(() => {
             if (isEqual(clickedCell, cell)) {
                 rightClickCell(cell);
+                setBusy();
             }
         }, 500);
     }
