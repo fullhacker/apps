@@ -1,4 +1,3 @@
-import { LocalStorageService } from '../services/localstorage.service.js';
 /*
     Author: Ayo Ayco
     Email: ramon.aycojr@gmail.com
@@ -6,6 +5,7 @@ import { LocalStorageService } from '../services/localstorage.service.js';
     Blog: FullHacker.com
     Live: games.fullhacker.com/minesweeper
 */
+import { LocalStorageService } from '../services/localstorage.service.js';
 
 export const Minesweeper = function(_grid, testMode = false) {
     let localStorageService = new LocalStorageService();
@@ -399,7 +399,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
         if (flagCount === cellValue) {
             clickSurrounding(cell);
-            console.log('middle click', cell);
+            if (testMode) console.log('middle click', cell);
         }
     }
 
@@ -492,7 +492,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 increaseFlagsCount();
                 setStatus(cell, 'default');
             }
-            console.log('right click', cell);
+            if (testMode) console.log('right click', cell);
         }
     }
 
@@ -503,7 +503,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         if (grid.getAttribute('game-status') != 'active') return;
         //Check if the end-user clicked on a mine
-        console.log('click', cell);
+        if (testMode) console.log('click', cell);
         if (getStatus(cell) == 'flagged' || grid.getAttribute('game-status') == 'over') {
             return;
         } else if (getStatus(cell) == 'clicked') {
@@ -523,7 +523,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         let count = 0;
         for (let i = 0; i < setting.rows; i++) {
             for (let j = 0; j < setting.cols; j++) {
-                if (isMine(grid.rows[i].cells[j])) console.log(count++ + ' - mine: [' + i + ',' + j + ']');
+                if (isMine(grid.rows[i].cells[j])) if (testMode) console.log(count++ + ' - mine: [' + i + ',' + j + ']');
             }
         }
     }
@@ -540,7 +540,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 minesArray.push([row, col]);
                 if (testMode){
                     transferMineToCell.innerHTML = 'X';
-                    console.log('transferred mine to: ' + row + ', ' + col);
+                    if (testMode) console.log('transferred mine to: ' + row + ', ' + col);
                 }
                 found = true;
                 return;
