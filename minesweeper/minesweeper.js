@@ -32,6 +32,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     ]
     let firstClick = true;
     let isBusy = false;
+    let clickedCell;
     const levels = {
         beginner: {
             rows: 9,
@@ -156,6 +157,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmouseup = function(e) {        
             pressed = undefined;
             let dont = false;
+            endClickTimer(this);
 
             if (bothPressed) {
                 bothPressed = false;
@@ -193,6 +195,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmousedown = function(e) {
             skip = false;
             if (!isBusy && typeof e === 'object') {
+                startClickTimer(this);
                 switch(e.button) {
                     case 0: isLeft = true; break;
                     case 2: isRight = true; break
@@ -223,6 +226,9 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmousemove = function(e) {
             if ((pressed || bothPressed) && typeof e === 'object') {
                 removeHighlights();
+                if (!isEqual(clickedCell, cell)) {
+                    clickedCell = undefined;
+                }
                 if (pressed == 'middle' || (isLeft && isRight)) {
                     highlightSurroundingCell(this);
                 } else if (pressed == 'left') {
@@ -230,6 +236,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                         highlightSurroundingCell(this);
                     } else {
                         highlightCell(this);
+                        startClickTimer(this);
                     }
                 }
             }
@@ -238,6 +245,29 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.oncontextmenu = () => false;
         cell.onselectstart = () => false;
         cell.setAttribute('unselectable', 'on');
+    }
+
+    function isEqual(x, y) {
+        if (!x) return false;
+        return x === y;
+    }
+
+    function startClickTimer(cell) {
+        if (isEqual(clickedCell, cell)) {
+            return;
+        }
+        const row = cell.parentNode.rowIndex;
+        const col = cell.cellIndex;
+        clickedCell = cell;
+        setTimeout(() => {
+            if (isEqual(clickedCell, cell)) {
+                rightClickCell(cell);
+            }
+        }, 750);
+    }
+
+    function endClickTimer(cell) {
+        clickedCell = undefined;
     }
 
     function resetMouseEventFlags() {
@@ -332,22 +362,22 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     function isMine(cell) {
-        return getMineIndex(cell) > -1;
+        return getIndex(minesArray, cell) > -1;
     }
 
-    function removeMine(cell) {
-        const index = getMineIndex(cell);
+    function removeItem(arr, cell) {
+        const index = getIndex(arr, cell);
         if (index > -1) {
-            minesArray.splice(index, 1);
+            arr.splice(index, 1);
         }
     }
 
-    function getMineIndex(cell) {
+    function getIndex(arr, cell) {
         const row = cell.parentNode.rowIndex;
         const col = cell.cellIndex;
         let index = -1;
-        for (let i = 0; i < minesArray.length; i++) {
-            let rowCol = minesArray[i]
+        for (let i = 0; i < arr.length; i++) {
+            let rowCol = arr[i]
             if (rowCol[0] === row && rowCol[1] === col) {
                 index = i;
                 break;
@@ -483,7 +513,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         if (grid.getAttribute('game-status') != 'active') return;
         if (getStatus(cell) != 'clicked' && getStatus(cell) != 'empty') {
-            if (getStatus(cell) == 'default') {
+            if (getStatus(cell) == 'default' || getStatus(cell) == 'highlighted') {
                 if (flagsCount <= 0) return;
                 cell.className = 'flag';
                 decreaseFlagsCount();
@@ -512,7 +542,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             return
         } else if (isMine(cell) && firstClick) {
             // cell.setAttribute('data-mine', 'false');
-            removeMine(cell);
+            removeMine(minesArray, cell);
             transferMine(cell);
             if (testMode) printMines();
         }
