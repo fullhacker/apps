@@ -73,6 +73,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     }
 
     this.generateGrid = function() {
+
         //generate 10 by 10 grid
         firstClick = true;
         grid.innerHTML="";
@@ -89,6 +90,10 @@ export const Minesweeper = function(_grid, testMode = false) {
             for (let j=0; j<setting.cols; j++) {
                 let cell = row.insertCell(j);
                 initializeEventHandlers(cell);
+
+                if ('ontouchstart' in document.documentElement) {
+                    initializeTouchEventHandlers(cell);
+                }
 
                 let status = document.createAttribute("data-status");       
                 status.value = "default";             
@@ -116,6 +121,31 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
 
         flagsDisplay.innerHTML = '&#128513;';
+    }
+
+    function initializeTouchEventHandlers(_cell) {
+        let cell = document.createElement('td');
+        cell = _cell;
+
+        let ontouchleave = function(e) {
+            if (clickedCell === this) {
+                clickedCell = undefined
+            }
+        }
+        cell.addEventListener('touchleave', ontouchleave);
+
+        let ontouchend = function(e) {
+            endClickTimer(this);
+        }
+        cell.addEventListener('touchend', ontouchend);
+
+        let ontouchstart = function(e) {
+            if (!isBusy && typeof e === 'object') {
+                startClickTimer(this);
+            }
+        }
+        cell.addEventListener('touchstart', ontouchstart);
+
     }
 
     function initializeEventHandlers(_cell) {
@@ -157,7 +187,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmouseup = function(e) {        
             pressed = undefined;
             let dont = false;
-            endClickTimer(this);
+            // endClickTimer(this);
 
             if (bothPressed) {
                 bothPressed = false;
@@ -192,10 +222,11 @@ export const Minesweeper = function(_grid, testMode = false) {
             }
         }
 
+
         cell.onmousedown = function(e) {
             skip = false;
             if (!isBusy && typeof e === 'object') {
-                startClickTimer(this);
+                // startClickTimer(this);
                 switch(e.button) {
                     case 0: isLeft = true; break;
                     case 2: isRight = true; break
@@ -226,9 +257,11 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmousemove = function(e) {
             if ((pressed || bothPressed) && typeof e === 'object') {
                 removeHighlights();
+                /*
                 if (!isEqual(clickedCell, cell)) {
                     clickedCell = undefined;
                 }
+                */
                 if (pressed == 'middle' || (isLeft && isRight)) {
                     highlightSurroundingCell(this);
                 } else if (pressed == 'left') {
@@ -236,7 +269,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                         highlightSurroundingCell(this);
                     } else {
                         highlightCell(this);
-                        startClickTimer(this);
+                        // startClickTimer(this);
                     }
                 }
             }
@@ -263,7 +296,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             if (isEqual(clickedCell, cell)) {
                 rightClickCell(cell);
             }
-        }, 750);
+        }, 500);
     }
 
     function endClickTimer(cell) {
@@ -396,7 +429,6 @@ export const Minesweeper = function(_grid, testMode = false) {
             }
         }
         if (levelComplete && grid.getAttribute('game-status') == 'active') {
-            // alert("You Win!");
             grid.setAttribute('game-status', 'win');
             revealMines();
         }
@@ -542,7 +574,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             return
         } else if (isMine(cell) && firstClick) {
             // cell.setAttribute('data-mine', 'false');
-            removeMine(minesArray, cell);
+            removeItem(minesArray, cell);
             transferMine(cell);
             if (testMode) printMines();
         }
@@ -593,7 +625,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         let mineCount=0;
         let cellRow = cell.parentNode.rowIndex;
         let cellCol = cell.cellIndex;
-        // alert(cellRow + " " + cellCol);
         for (let i = Math.max(cellRow-1,0); i <= Math.min(cellRow+1,setting.rows-1); i++) {
             const rows = grid.rows[i];
             if (!rows) continue;
@@ -643,7 +674,6 @@ export const Minesweeper = function(_grid, testMode = false) {
 
         if (isMine(cell)) {
             revealMines();
-            // alert("Game Over");
             flagsDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
