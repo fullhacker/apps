@@ -1,7 +1,7 @@
 import { Minesweeper } from './minesweeper.js';
 
 //Turn this variable to true to see where the mines are
-var testMode = true;
+var testMode = false;
 
 // to declare varible grid as type HTMLTableElement and get proper intellisense
 var grid = document.createElement('table');
