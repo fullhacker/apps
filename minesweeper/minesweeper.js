@@ -5,10 +5,11 @@
     Blog: FullHacker.com
     Live: games.fullhacker.com/minesweeper
 */
-import { LocalStorageService } from '../services/localstorage.service.js';
+
+import { StorageService } from '../services/storage.service.js';
 
 export const Minesweeper = function(_grid, testMode = false) {
-    let localStorageService = new LocalStorageService();
+    let storageService = new StorageService();
     let grid = document.createElement('table');
     let flagsDisplay = document.createElement('span');
     flagsDisplay = document.getElementById('flags-count');
@@ -58,15 +59,15 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
     }
 
-    let cachedSetting = localStorageService.getFromLocalStorage('setting');
+    let cachedSetting = storageService.getFromLocal('setting');
     let setting = cachedSetting || levels.beginner;
-    localStorageService.saveToLocalStorage('setting', setting);
+    storageService.saveToLocal('setting', setting);
     let flagsCount = setting.mines;
     let minesArray = [];
 
     this.updateSetting = function(key){
         setting = levels[key];
-        localStorageService.saveToLocalStorage('setting', setting);
+        storageService.saveToLocal('setting', setting);
         this.generateGrid();
     }
 
