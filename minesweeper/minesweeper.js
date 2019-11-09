@@ -76,6 +76,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         grid.innerHTML="";
         grid.oncontextmenu = () => false;
         flagsCount = setting.mines;
+        minesArray = [];
 
         const settingField = document.getElementById('setting-field');
         settingField.value = setting.name || 'Choose a level';
