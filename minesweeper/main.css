@@ -191,6 +191,7 @@ div#flags-count-wrapper,
 div#toolbar-wrapper {
   height: 20px;
 }
+<<<<<<< HEAD
 
 /** mobile **/
 @media only screen and (max-width: 600px) {
@@ -203,3 +204,5 @@ div#toolbar-wrapper {
     min-height: 20px;
   }
 }
+=======
+>>>>>>> origin/master

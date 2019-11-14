@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- don't cache -->
+    <!-- Tell the browser not to cache -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -51,15 +51,16 @@
         </select>
     </div>
 
-    <div class="hint-wrapper">
-        <h1>Instructions</h1>
-        <ol class="instructions">
+    <div id="instructions" class="hint-wrapper">
+        <h1 class="pointer">Instructions</h1>
+        <ol class="body instructions">
             <li>Clicking a cell which doesn't have a bomb reveals the number of surrounding bombs. Use this information plus some guess work to avoid opening the bombs.</li>
             <li>To open a cell, click on it. To flag a cell you think is a bomb, right-click.</li>
         </ol>
     </div>
-    <div class="hint-wrapper">
-        <span class="hint">Pro Tip:  Clicking an open cell that has the correct number of flagged neighboring bombs will open all remaining unopened neighbor cells all at once. If an incorrect number of neighbors are flagged, or all neighbors are flagged or open, clicking the cell has no effect. If an incorrect neighbor is flagged, this will cause instant death.</span>
+    <div id="pro-tip" class="hint-wrapper">
+        <h1 class="pointer">Pro Tip</h1>
+        <span class="body hint">Clicking an open cell that has the correct number of flagged neighboring bombs will open all remaining unopened neighbor cells all at once. If an incorrect number of neighbors are flagged, or all neighbors are flagged or open, clicking the cell has no effect. If an incorrect neighbor is flagged, this will cause instant death.</span>
     </div>
     <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a coffee', '#29abe0', 'ayoayco');kofiwidget2.draw();</script> 
     <script type="module" src="main.js"></script>
