@@ -11,7 +11,7 @@ import { TimerService } from '../services/timer.service.js';
 import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 
-const VERSION = "0.2.1 Beta";
+const VERSION = "0.2.2";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
@@ -25,7 +25,12 @@ export const Minesweeper = function() {
     let grid = document.createElement('table');
     grid.setAttribute('id', 'grid');
     let flagsDisplay = document.createElement('span');
+    let smileyDisplay = document.createElement('span');
     let timerDisplay = document.createElement('span');
+    let footbar = document.createElement('div');
+    let customWrapper = document.createElement('div');
+    customWrapper.setAttribute('id', 'custom-wrapper');
+    let appElement = document.getElementById('app');
 
     let isMobile = false;
     let isLeft = false;
@@ -53,20 +58,14 @@ export const Minesweeper = function() {
     let minesArray = [];
 
     this.initialize = function() {
-        const appElement = document.getElementById('app');
         
-        const heading = `Minesweeper v${VERSION}`
+        const heading = `Minesweeper v${VERSION}`;
         const headingElement = document.createElement('h1');
         headingElement.innerText = heading;
-        appElement.append(headingElement);
-
-        appElement.append(initializeToolbar());
-
-        appElement.append(grid);
+        appElement.append(headingElement, initializeToolbar(), grid);
         generateGrid()
-
-        appElement.append(initializeFootbar());
-
+        footbar = initializeFootbar();
+        appElement.append(footbar);
     }
 
     function initializeFootbar() {
@@ -77,7 +76,7 @@ export const Minesweeper = function() {
         resetButton.onmousedown = () => generateGrid();
         footBar.append(resetButton);
 
-        const levelsDropdown = document.createElement('select');
+        let levelsDropdown = document.createElement('select');
         levelsDropdown.onchange = () => updateSetting(levelsDropdown.value);
         const levelsKeys = Object.keys(levels);
         levelsKeys.forEach(key => {
@@ -89,9 +88,54 @@ export const Minesweeper = function() {
             }
             levelsDropdown.add(levelOption, null);
         });
+        const customOption = document.createElement('option');
+        customOption.onmousedown = () => {}
+        customOption.value = 'custom';
+        customOption.text = 'Custom';
+        levelsDropdown.add(customOption);
         footBar.append(levelsDropdown);
 
         return footBar;
+    }
+
+    function removeCustomOptions() {
+        const customCopy = document.getElementById('custom-wrapper');
+        if (customCopy) {
+            footbar.removeChild(customWrapper);
+        }
+    }
+
+    function insertCustomOptions() {
+        
+        const inputElements = [];
+
+        const rowsInput = document.createElement('input');
+        rowsInput.placeholder = 'Rows';
+        inputElements.push(rowsInput);
+
+        const colsInput = document.createElement('input');
+        colsInput.placeholder = 'Columns';
+        inputElements.push(colsInput);
+
+        const bombsInput = document.createElement('input');
+        bombsInput.placeholder = 'Bombs';
+        inputElements.push(bombsInput);
+
+        const okButton = document.createElement('button');
+        okButton.innerText = 'Okay';
+        const setting = {rows: rowsInput.value, cols: colsInput.value, bombs: bombsInput.value};
+        okButton.onmousedown = () => updateSetting('custom-action', setting);
+
+        inputElements.forEach(input => {
+            input.style.marginRight = '15px';
+            input.style.width = '100px';
+            input.maxLength = 3;
+            input.type = 'number';
+            input.width = 50;
+        });
+
+        customWrapper.append(...inputElements, okButton);
+        footbar.append(customWrapper);
     }
 
     function capitalize(str) {
@@ -101,22 +145,45 @@ export const Minesweeper = function() {
 
     function initializeToolbar() {
         const toolbar = document.createElement('div');
+        const toolbarItems = [];
 
         const flagsWrapper = document.createElement('div');
         flagsWrapper.append(flagsDisplay)
+        flagsWrapper.style.height = '20px';
         toolbar.append(flagsWrapper);
+        toolbarItems.push(flagsWrapper);
+
+        const smileyWrapper = document.createElement('div');
+        smileyWrapper.append(smileyDisplay);
+        toolbar.append(smileyWrapper);
+        toolbarItems.push(smileyWrapper);
 
         const timerWrapper = document.createElement('div');
         timerWrapper.append(timerDisplay);
+        timerWrapper.style.height = '20px';
         toolbar.append(timerWrapper);
+        toolbarItems.push(timerWrapper);
+
+        toolbar.style.cursor = 'pointer';
+        toolbar.style.padding = '10px 35px';
+        toolbar.style.display = 'flex';
+        toolbar.style.justifyContent = 'space-between';
+        toolbar.onmousedown = () => generateGrid();
 
         return toolbar;
     }
 
-    function updateSetting(key) {
-        setting = levels[key];
-        storageService.saveToLocal('setting', setting);
-        generateGrid();
+    function updateSetting(key, custom) {
+        if (key === 'custom') {
+            insertCustomOptions();
+        } else if (key === 'custom-action') {
+            console.log('custom', custom);
+        } else {
+            setting = levels[key];
+            storageService.saveToLocal('setting', setting);
+            removeCustomOptions();
+            generateGrid();
+        }
     }
 
 
@@ -151,6 +218,10 @@ export const Minesweeper = function() {
         gameStatus.value = 'inactive';
         grid.setAttributeNode(gameStatus);
 
+        appElement.style.width = `${grid.offsetWidth + 40}px`;
+        appElement.style.margin = '0 auto';
+
+        smileyDisplay.innerText = '';
         timerService.initialize(timerDisplay);
         updateFlagsCountDisplay();
         addMines(setting.mines);
@@ -167,11 +238,10 @@ export const Minesweeper = function() {
 
     function updateFlagsCountDisplay(count = flagsCount) {
         if (grid.getAttribute('game-status') != 'win') {
-            flagsDisplay.innerHTML = 'Flags left:' + count;
+            flagsDisplay.innerHTML = `${count}`;
             return;
         }
-
-        flagsDisplay.innerHTML = '&#128513;';
+        smileyDisplay.innerHTML = '&#128513;';
     }
 
     function initializeTouchEventHandlers(_cell) {
@@ -726,7 +796,7 @@ export const Minesweeper = function() {
 
         if (isMine(cell)) {
             revealMines();
-            flagsDisplay.innerHTML = '&#128561;';
+            smileyDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
             const mineCount = countMinesAround(cell);

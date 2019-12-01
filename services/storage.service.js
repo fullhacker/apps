@@ -20,10 +20,12 @@ export class StorageService {
     }
 
     getFromLocal(key) {
-        return JSON.parse(localStorage.getItem(key));
+        const data = localStorage.getItem(key);
+        if (data !== 'undefined') return JSON.parse(data);
     }
 
     getFromSession(key) {
-        return JSON.parse(sessionStorage.getItem(key));
+        const data = sessionStorage.getItem(key);
+        if (data !== 'undefined') return JSON.parse(data);
     }
 }

@@ -39,7 +39,7 @@ export class TimerService {
     updateDisplay() {
         let currentTime = new Date().getTime() - this.startTime;
         this.time = Math.floor(currentTime / INTERVAL);
-        this.display.innerHTML = this.pretty(this.time) || '00:00:00.0';
+        this.display.innerHTML = this.pretty(this.time) || '0';
     }
 
     pretty(duration) {
@@ -53,7 +53,12 @@ export class TimerService {
         minutes = (minutes < 10) ? "0" + minutes : minutes;
         seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-        return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+        return `${this.clean(hours, ':')}${this.clean(minutes, ':')}${this.clean(seconds, '.')}${this.clean(milliseconds, '')}`;
+        // return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+    }
+
+    clean(str, separator) {
+        return (str === '00') ? '' : `${str}${separator}`;
     }
 }
 
