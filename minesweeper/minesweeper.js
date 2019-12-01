@@ -7,7 +7,7 @@
 */
 
 import { StorageService } from '../services/storage.service.js';
-import { levels } from './levels';
+import { levels } from './levels.js';
 
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
