@@ -16,6 +16,7 @@ export class TimerService {
         if (!el) return;
 
         this.display = el;
+        this.running = false;
         this.startTime = undefined;
         this.updateDisplay();
     }
@@ -32,26 +33,27 @@ export class TimerService {
     stop() {
         this.running = false;
         clearInterval(this.id);
-        this.updateDisplay();
+        return this.time;
     }
 
     updateDisplay() {
         let currentTime = new Date().getTime() - this.startTime;
-        const time = Math.floor(currentTime / INTERVAL);
-        this.display.innerHTML = msToTime(time) || '00:00:00.0';
+        this.time = Math.floor(currentTime / INTERVAL);
+        this.display.innerHTML = this.pretty(this.time) || '00:00:00.0';
+    }
+
+    pretty(duration) {
+        if (!duration) return undefined;
+        var milliseconds = parseInt((duration % 1000) / 100),
+            seconds = Math.floor((duration / 1000) % 60),
+            minutes = Math.floor((duration / (1000 * 60)) % 60),
+            hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+        hours = (hours < 10) ? "0" + hours : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+        return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
     }
 }
 
-function msToTime(duration) {
-    if (!duration) return undefined;
-    var milliseconds = parseInt((duration % 1000) / 100),
-        seconds = Math.floor((duration / 1000) % 60),
-        minutes = Math.floor((duration / (1000 * 60)) % 60),
-        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-}
