@@ -282,7 +282,7 @@ export const Minesweeper = function() {
 
         document.onkeydown = function(e) {
             if (e.keyCode == 32) {
-                _this.generateGrid();
+                generateGrid();
             }
             resetMouseEventFlags();
         }
