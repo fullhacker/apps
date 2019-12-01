@@ -11,7 +11,7 @@ import { TimerService } from '../services/timer.service.js';
 import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 
-const VERSION = "0.2.2";
+const VERSION = "0.2.3";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
