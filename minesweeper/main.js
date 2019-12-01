@@ -19,19 +19,6 @@ var myMinesweeper = new Minesweeper(grid, testMode);
 const dialogService = new DialogService();
 dialogService.initialize();
 
-/** event handlers **/
-// event for updating the difficulty level
-window.updateSetting = function() {
-    let settingField = document.createElement('select');
-    settingField = document.getElementById('setting-field');
-    const settingKey = settingField.options[settingField.selectedIndex].value;
-    myMinesweeper.updateSetting(settingKey);
-}
-
-// event for resetting the game
-window.reset = function() {
- myMinesweeper.generateGrid();
-}
 
 // event for hiding the announcement
 window.hideAnnouncement = function() {
@@ -39,4 +26,4 @@ window.hideAnnouncement = function() {
 }
 
 /** start the game **/
-myMinesweeper.generateGrid();
+myMinesweeper.initialize();

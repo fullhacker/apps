@@ -2,6 +2,16 @@
  initial code from: https://codepen.io/101Computing/pen/wEbEqx
 */
 
+/* helpers */
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
+}
+.clear-both {
+  clear: both;
+}
 
 body {
   background: black;

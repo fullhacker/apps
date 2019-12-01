@@ -11,19 +11,22 @@ import { TimerService } from '../services/timer.service.js';
 import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 
+const VERSION = "0.2 Beta";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
+const TEST_MODE = false;
 
-export const Minesweeper = function(_grid, testMode = false) {
+export const Minesweeper = function() {
     const _this = this;
     const storageService = new StorageService();
     const timerService = new TimerService();
     const loggerService = new LoggerService();
 
     let grid = document.createElement('table');
-        grid = _grid;
+    grid.setAttribute('id', 'grid');
     let flagsDisplay = document.createElement('span');
-        flagsDisplay = document.getElementById('flags-count');
+    let timerDisplay = document.createElement('span');
+
     let isMobile = false;
     let isLeft = false;
     let isRight = false;
@@ -49,13 +52,75 @@ export const Minesweeper = function(_grid, testMode = false) {
     let flagsCount = setting.mines;
     let minesArray = [];
 
-    this.updateSetting = function(key){
-        setting = levels[key];
-        storageService.saveToLocal('setting', setting);
-        this.generateGrid();
+    this.initialize = function() {
+        const appElement = document.getElementById('app');
+        
+        const heading = `Minesweeper v${VERSION}`
+        const headingElement = document.createElement('h1');
+        headingElement.innerText = heading;
+        appElement.append(headingElement);
+
+        appElement.append(initializeToolbar());
+
+        appElement.append(grid);
+        generateGrid()
+
+        appElement.append(initializeFootbar());
+
     }
 
-    this.generateGrid = function() {
+    function initializeFootbar() {
+        const footBar = document.createElement('div');
+
+        const resetButton = document.createElement('button');
+        resetButton.innerText = 'Reset';
+        resetButton.onmousedown = () => generateGrid();
+        footBar.append(resetButton);
+
+        const levelsDropdown = document.createElement('select');
+        levelsDropdown.onchange = () => updateSetting(levelsDropdown.value);
+        const levelsKeys = Object.keys(levels);
+        levelsKeys.forEach(key => {
+            const levelOption = document.createElement('option');
+            levelOption.value = levels[key].name;
+            levelOption.text = capitalize(levels[key].name);
+            if (setting.name === levelOption.value) {
+                levelOption.selected = true;
+            }
+            levelsDropdown.add(levelOption, null);
+        });
+        footBar.append(levelsDropdown);
+
+        return footBar;
+    }
+
+    function capitalize(str) {
+        if (!str) return '';
+        return `${str[0].toUpperCase()}${str.slice(1, str.length)}`;
+    }
+
+    function initializeToolbar() {
+        const toolbar = document.createElement('div');
+
+        const flagsWrapper = document.createElement('div');
+        flagsWrapper.append(flagsDisplay)
+        toolbar.append(flagsWrapper);
+
+        const timerWrapper = document.createElement('div');
+        timerWrapper.append(timerDisplay);
+        toolbar.append(timerWrapper);
+
+        return toolbar;
+    }
+
+    function updateSetting(key) {
+        setting = levels[key];
+        storageService.saveToLocal('setting', setting);
+        generateGrid();
+    }
+
+
+    function generateGrid() {
 
         //generate 10 by 10 grid
         firstClick = true;
@@ -63,9 +128,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         grid.oncontextmenu = () => false;
         flagsCount = setting.mines;
         minesArray = [];
-
-        const settingField = document.getElementById('setting-field');
-        settingField.value = setting.name || 'Choose a level';
 
         for (let i = 0; i < setting.rows; i++) {
             let row = grid.insertRow(i);
@@ -89,8 +151,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         gameStatus.value = 'inactive';
         grid.setAttributeNode(gameStatus);
 
-        let timerDisplay = document.createElement('span');
-        timerDisplay = document.getElementById('timer-text');
         timerService.initialize(timerDisplay);
         updateFlagsCountDisplay();
         addMines(setting.mines);
@@ -310,11 +370,11 @@ export const Minesweeper = function(_grid, testMode = false) {
             } else {
                 minesArray.push([row, col]);
             }
-            if (testMode){
+            if (TEST_MODE){
                 cell.innerHTML = 'X';
             }
         }
-        if (testMode) {
+        if (TEST_MODE) {
             printMines();
         }
     }
@@ -450,7 +510,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
         if (flagCount === cellValue) {
             clickSurrounding(cell);
-            if (testMode) loggerService.debug('middle click', cell);
+            if (TEST_MODE) loggerService.debug('middle click', cell);
         }
     }
 
@@ -545,7 +605,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 increaseFlagsCount();
                 setStatus(cell, 'default');
             }
-            if (testMode) loggerService.debug('right click', cell);
+            if (TEST_MODE) loggerService.debug('right click', cell);
         }
     }
 
@@ -556,7 +616,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         if (grid.getAttribute('game-status') != 'active') return;
         //Check if the end-user clicked on a mine
-        if (testMode) loggerService.debug('click', cell);
+        if (TEST_MODE) loggerService.debug('click', cell);
         if (getStatus(cell) == 'flagged' || grid.getAttribute('game-status') == 'over') {
             return;
         } else if (getStatus(cell) == 'clicked') {
@@ -566,7 +626,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             // cell.setAttribute('data-mine', 'false');
             removeItem(minesArray, cell);
             transferMine(cell);
-            if (testMode) printMines();
+            if (TEST_MODE) printMines();
         }
 
         openCell(cell);
@@ -593,9 +653,9 @@ export const Minesweeper = function(_grid, testMode = false) {
                 continue;
             } else {
                 minesArray.push([row, col]);
-                if (testMode){
+                if (TEST_MODE){
                     transferMineToCell.innerHTML = 'X';
-                    if (testMode) loggerService.debug('transferred mine to: ' + row + ', ' + col);
+                    if (TEST_MODE) loggerService.debug('transferred mine to: ' + row + ', ' + col);
                 }
                 found = true;
                 return;
