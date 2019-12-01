@@ -158,8 +158,8 @@ export const Minesweeper = function() {
 
         const smileyWrapper = document.createElement('div');
         smileyWrapper.append(smileyDisplay);
-        toolbar.append(smileyWrapper);
-        toolbarItems.push(smileyWrapper);
+        // toolbar.append(smileyWrapper);
+        // toolbarItems.push(smileyWrapper);
 
         const timerWrapper = document.createElement('div');
         timerWrapper.append(timerDisplay);
@@ -224,7 +224,6 @@ export const Minesweeper = function() {
         appElement.style.width = `${grid.offsetWidth + 40}px`;
         appElement.style.margin = '0 auto';
 
-        smileyDisplay.innerText = '';
         timerService.initialize(timerDisplay);
         updateFlagsCountDisplay();
         addMines(setting.mines);
@@ -244,7 +243,7 @@ export const Minesweeper = function() {
             flagsDisplay.innerHTML = `${count}`;
             return;
         }
-        smileyDisplay.innerHTML = '&#128513;';
+        flagsDisplay.innerHTML = '&#128513;';
     }
 
     function initializeTouchEventHandlers(_cell) {
@@ -799,7 +798,7 @@ export const Minesweeper = function() {
 
         if (isMine(cell)) {
             revealMines();
-            smileyDisplay.innerHTML = '&#128561;';
+            flagsDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
             const mineCount = countMinesAround(cell);
