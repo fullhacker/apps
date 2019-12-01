@@ -6,20 +6,24 @@
     Live: games.fullhacker.com/minesweeper
 */
 
-export const StorageService = function() {
-    this.saveToLocal = function(key, value) {
+export class StorageService {
+
+    constructor() {
+    }
+    
+    saveToLocal(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
     }
 
-    this.saveToSession = function(key, value) {
+    saveToSession(key, value) {
         sessionStorage.setItem(key, JSON.stringify(value));
     }
 
-    this.getFromLocal = function(key) {
+    getFromLocal(key) {
         return JSON.parse(localStorage.getItem(key));
     }
 
-    this.getFromSession = function(key) {
+    getFromSession(key) {
         return JSON.parse(sessionStorage.getItem(key));
     }
 }

@@ -7,18 +7,23 @@
 */
 
 import { StorageService } from '../services/storage.service.js';
+import { TimerService } from '../services/timer.service.js';
+import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 
 export const Minesweeper = function(_grid, testMode = false) {
-    let storageService = new StorageService();
-    let grid = document.createElement('table');
-    let flagsDisplay = document.createElement('span');
-    flagsDisplay = document.getElementById('flags-count');
-    grid = _grid;
     const _this = this;
+    const storageService = new StorageService();
+    const timerService = new TimerService();
+    const loggerService = new LoggerService();
+
+    let grid = document.createElement('table');
+        grid = _grid;
+    let flagsDisplay = document.createElement('span');
+        flagsDisplay = document.getElementById('flags-count');
     let isMobile = false;
     let isLeft = false;
     let isRight = false;
@@ -118,13 +123,13 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.addEventListener('touchleave', ontouchleave);
 
         let ontouchend = function(e) {
-            endClickTimer(this);
+            endTouchTimer();
         }
         cell.addEventListener('touchend', ontouchend);
 
         let ontouchstart = function(e) {
             if (!isBusy && typeof e === 'object') {
-                startClickTimer(this);
+                startTouchTimer(this);
             }
         }
         cell.addEventListener('touchstart', ontouchstart);
@@ -170,7 +175,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmouseup = function(e) {        
             pressed = undefined;
             let dont = false;
-            // endClickTimer(this);
 
             if (bothPressed) {
                 bothPressed = false;
@@ -209,7 +213,6 @@ export const Minesweeper = function(_grid, testMode = false) {
         cell.onmousedown = function(e) {
             skip = false;
             if (!isBusy && typeof e === 'object') {
-                // startClickTimer(this);
                 switch(e.button) {
                     case 0: isLeft = true; break;
                     case 2: isRight = true; break
@@ -252,7 +255,6 @@ export const Minesweeper = function(_grid, testMode = false) {
                         highlightSurroundingCell(this);
                     } else {
                         highlightCell(this);
-                        // startClickTimer(this);
                     }
                 }
             }
@@ -268,12 +270,10 @@ export const Minesweeper = function(_grid, testMode = false) {
         return x === y;
     }
 
-    function startClickTimer(cell) {
+    function startTouchTimer(cell) {
         if (isEqual(clickedCell, cell)) {
             return;
         }
-        const row = cell.parentNode.rowIndex;
-        const col = cell.cellIndex;
         clickedCell = cell;
         setTimeout(() => {
             if (isEqual(clickedCell, cell)) {
@@ -283,7 +283,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }, 500);
     }
 
-    function endClickTimer(cell) {
+    function endTouchTimer() {
         clickedCell = undefined;
     }
 
@@ -446,7 +446,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
         if (flagCount === cellValue) {
             clickSurrounding(cell);
-            if (testMode) console.log('middle click', cell);
+            if (testMode) loggerService.debug('middle click', cell);
         }
     }
 
@@ -487,6 +487,7 @@ export const Minesweeper = function(_grid, testMode = false) {
 
     function activateGame() {
         grid.setAttribute('game-status', 'active');
+        // start timer
     }
 
     function gameIsDone() {
@@ -539,7 +540,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 increaseFlagsCount();
                 setStatus(cell, 'default');
             }
-            if (testMode) console.log('right click', cell);
+            if (testMode) loggerService.debug('right click', cell);
         }
     }
 
@@ -550,7 +551,7 @@ export const Minesweeper = function(_grid, testMode = false) {
         }
         if (grid.getAttribute('game-status') != 'active') return;
         //Check if the end-user clicked on a mine
-        if (testMode) console.log('click', cell);
+        if (testMode) loggerService.debug('click', cell);
         if (getStatus(cell) == 'flagged' || grid.getAttribute('game-status') == 'over') {
             return;
         } else if (getStatus(cell) == 'clicked') {
@@ -570,7 +571,9 @@ export const Minesweeper = function(_grid, testMode = false) {
         let count = 0;
         for (let i = 0; i < setting.rows; i++) {
             for (let j = 0; j < setting.cols; j++) {
-                if (isMine(grid.rows[i].cells[j])) if (testMode) console.log(count++ + ' - mine: [' + i + ',' + j + ']');
+                if (isMine(grid.rows[i].cells[j])) {
+                    loggerService.debug(count++ + ' - mine: [' + i + ',' + j + ']');
+                }
             }
         }
     }
@@ -587,7 +590,7 @@ export const Minesweeper = function(_grid, testMode = false) {
                 minesArray.push([row, col]);
                 if (testMode){
                     transferMineToCell.innerHTML = 'X';
-                    if (testMode) console.log('transferred mine to: ' + row + ', ' + col);
+                    if (testMode) loggerService.debug('transferred mine to: ' + row + ', ' + col);
                 }
                 found = true;
                 return;

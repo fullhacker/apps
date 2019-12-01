@@ -25,7 +25,6 @@ window.updateSetting = function() {
     let settingField = document.createElement('select');
     settingField = document.getElementById('setting-field');
     const settingKey = settingField.options[settingField.selectedIndex].value;
-    console.log('updating settings: ' + settingKey);
     myMinesweeper.updateSetting(settingKey);
 }
 
