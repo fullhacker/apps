@@ -78,6 +78,7 @@ export const Minesweeper = function() {
 
         let levelsDropdown = document.createElement('select');
         levelsDropdown.onchange = () => updateSetting(levelsDropdown.value);
+
         const levelsKeys = Object.keys(levels);
         levelsKeys.forEach(key => {
             const levelOption = document.createElement('option');
@@ -88,11 +89,13 @@ export const Minesweeper = function() {
             }
             levelsDropdown.add(levelOption, null);
         });
+
         const customOption = document.createElement('option');
         customOption.onmousedown = () => {}
         customOption.value = 'custom';
         customOption.text = 'Custom';
-        levelsDropdown.add(customOption);
+        // levelsDropdown.add(customOption);
+
         footBar.append(levelsDropdown);
 
         return footBar;
