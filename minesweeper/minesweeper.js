@@ -89,6 +89,9 @@ export const Minesweeper = function(_grid, testMode = false) {
         gameStatus.value = 'inactive';
         grid.setAttributeNode(gameStatus);
 
+        let timerDisplay = document.createElement('span');
+        timerDisplay = document.getElementById('timer-text');
+        timerService.initialize(timerDisplay);
         updateFlagsCountDisplay();
         addMines(setting.mines);
     }
