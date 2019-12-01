@@ -334,6 +334,7 @@ export const Minesweeper = function(_grid, testMode = false) {
             }
         }
         grid.setAttribute('game-status', 'done');
+        timerService.stop();
     }
 
     function handleWinRevelation(cell) {

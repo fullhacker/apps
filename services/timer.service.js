@@ -16,7 +16,8 @@ export class TimerService {
         if (!el) return;
 
         this.display = el;
-        this.stop();
+        this.startTime = undefined;
+        this.updateDisplay();
     }
 
     start() {
@@ -30,7 +31,6 @@ export class TimerService {
 
     stop() {
         this.running = false;
-        this.startTime = undefined;
         clearInterval(this.id);
         this.updateDisplay();
     }
