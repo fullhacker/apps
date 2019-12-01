@@ -6,6 +6,8 @@
     Live: games.fullhacker.com/minesweeper
 */
 
+const INTERVAL = 1;
+
 export class TimerService {
 
     constructor() {}
@@ -14,8 +16,7 @@ export class TimerService {
         if (!el) return;
 
         this.display = el;
-        this.currentTime = '0:00:00';
-        this.updateDisplay();
+        this.stop();
     }
 
     start() {
@@ -23,14 +24,34 @@ export class TimerService {
 
         // run timer
         this.running = true;
-        this.updateDisplay();
+        this.startTime = new Date().getTime();
+        this.id = window.setInterval(() => this.updateDisplay(), INTERVAL);
     }
 
     stop() {
-
+        this.running = false;
+        this.startTime = undefined;
+        clearInterval(this.id);
+        this.updateDisplay();
     }
 
     updateDisplay() {
-        this.display.innerHTML = this.currentTime;
+        let currentTime = new Date().getTime() - this.startTime;
+        const time = Math.floor(currentTime / INTERVAL);
+        this.display.innerHTML = msToTime(time) || 0;
     }
+}
+
+function msToTime(duration) {
+    if (!duration) return undefined;
+    var milliseconds = parseInt((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 }

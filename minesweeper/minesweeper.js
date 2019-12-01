@@ -491,6 +491,7 @@ export const Minesweeper = function(_grid, testMode = false) {
     function activateGame() {
         grid.setAttribute('game-status', 'active');
         // start timer
+        timerService.start();
     }
 
     function gameIsDone() {
