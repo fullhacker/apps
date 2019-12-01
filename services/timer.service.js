@@ -38,7 +38,7 @@ export class TimerService {
     updateDisplay() {
         let currentTime = new Date().getTime() - this.startTime;
         const time = Math.floor(currentTime / INTERVAL);
-        this.display.innerHTML = msToTime(time) || 0;
+        this.display.innerHTML = msToTime(time) || '00:00:00.0';
     }
 }
 
