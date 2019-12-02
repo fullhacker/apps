@@ -29,6 +29,8 @@ export class LeaderBoardService {
         if (!displayElement) return;
         return collection.onSnapshot(list => {
             displayElement.innerHTML = '';
+            displayElement.style.listStyle = 'none';
+            displayElement.style.marginLeft = '-40px';
             const docs = list.docs;
             if (docs && docs.length) {
                 for (let i = 0; i < 10; i++) {
@@ -37,7 +39,7 @@ export class LeaderBoardService {
                         const prettyTime = timerService.pretty(game.data().time);
                         const name = game.data().name || '';
                         const item = document.createElement('li');
-                        item.innerText = `${name} - ${prettyTime}`;
+                        item.innerText = `#${i+1}: ${name} - ${prettyTime}`;
                         displayElement.append(item);
                     }
                 }
