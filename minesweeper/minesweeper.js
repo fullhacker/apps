@@ -12,7 +12,7 @@ import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 import { LeaderBoardService } from '../services/leader-board.service.js';
 
-const VERSION = "0.3";
+const VERSION = "0.3.1";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
@@ -77,13 +77,9 @@ export const Minesweeper = function() {
     }
 
     function initializeLeaderBoard() {
-        leaderWrapper.innerHTML = '';
-        const leaderHeading = document.createElement('h3');
-        leaderHeading.innerText = `Best Times (${setting.name})`;
-        const leaderList = document.createElement('ol');
-        leaderBoard.update(setting.name, leaderList);
+        const title = `Best Times (${setting.name})`;
+        leaderBoard.update(setting.name, leaderWrapper, title);
 
-        leaderWrapper.append(leaderHeading, leaderList);
         appElement.append(leaderWrapper);
     }
 

@@ -13,7 +13,7 @@ export class LeaderBoardService {
         this.leaders = db.collection(collectionName);
     }
 
-    update(level, displayElement) {
+    update(level, displayElement, title) {
         if (level) {
             if (this.unsubscribe) {
                 this.unsubscribe();
@@ -21,16 +21,25 @@ export class LeaderBoardService {
             this.lastPlace = Number.MAX_SAFE_INTEGER;
             this.topList = this.leaders.doc(level)
                 .collection('games').orderBy('time');
-            this.unsubscribe = this.setListener(this.topList, displayElement);
+            this.unsubscribe = this.setListener(this.topList, displayElement, title);
         }
+
     }
 
-    setListener(collection, displayElement) {
+    setListener(collection, displayElement, title) {
         if (!displayElement) return;
+
+        displayElement.innerHTML = '';
+        const leaderHeading = document.createElement('h3');
+        leaderHeading.innerText = title;
+
+        const leaderList = document.createElement('ol');
+
+
         return collection.onSnapshot(list => {
-            displayElement.innerHTML = '';
-            displayElement.style.listStyle = 'none';
-            displayElement.style.marginLeft = '-40px';
+            leaderList.innerHTML = '';
+            leaderList.style.listStyle = 'none';
+            leaderList.style.marginLeft = '-40px';
             const docs = list.docs;
             if (docs && docs.length) {
                 for (let i = 0; i < 10; i++) {
@@ -40,13 +49,14 @@ export class LeaderBoardService {
                         const name = game.data().name || '';
                         const item = document.createElement('li');
                         item.innerText = `#${i+1}: ${name} - ${prettyTime}`;
-                        displayElement.append(item);
+                        leaderList.append(item);
                     }
                 }
                 if (list.docs.length >= 10) {
                     this.lastPlace = list.docs[9].data().time;
                 }
 
+                displayElement.append(leaderHeading, leaderList);
             }
         });
 
