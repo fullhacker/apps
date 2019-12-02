@@ -1,3 +1,5 @@
+import { LoggerService } from "./logger.service.js";
+
 /*
     Author: Ayo Ayco
     Email: ramon.aycojr@gmail.com
@@ -10,14 +12,16 @@ const INTERVAL = 1;
 
 export class TimerService {
 
-    constructor() {}
+    constructor() {
+        this.loggerService = new LoggerService();
+    }
 
     initialize(el) {
         if (!el) return;
 
         this.display = el;
-        this.running = false;
         this.startTime = undefined;
+        this.stop()
         this.updateDisplay();
     }
 
@@ -28,13 +32,13 @@ export class TimerService {
         this.running = true;
         this.startTime = new Date().getTime();
         this.id = window.setInterval(() => this.updateDisplay(), INTERVAL);
-        console.log('start' + this.id);
+        this.loggerService.debug(`started timer id: ${this.id}`);
     }
 
     stop() {
         this.running = false;
         clearInterval(this.id);
-        console.log('stop' + this.id);
+        this.loggerService.debug(`stopped timer id: ${this.id}`);
         return this.time;
     }
 
