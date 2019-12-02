@@ -11,9 +11,7 @@ import { DialogService } from '../services/dialog.service.js';
 
 /** app config variables **/
 //Turn this variable to true to see where the mines are
-var testMode = false;
-var grid = document.getElementById("grid");
-var myMinesweeper = new Minesweeper(grid, testMode);
+var myMinesweeper = new Minesweeper((time, status) => console.log(time, status));
 
 /** initialize the dialog service **/
 const dialogService = new DialogService();

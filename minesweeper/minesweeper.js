@@ -16,7 +16,7 @@ const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
 
-export const Minesweeper = function() {
+export const Minesweeper = function(gameOver) {
     const _this = this;
     const storageService = new StorageService();
     const timerService = new TimerService();
@@ -31,6 +31,7 @@ export const Minesweeper = function() {
     let customWrapper = document.createElement('div');
     customWrapper.setAttribute('id', 'custom-wrapper');
     let appElement = document.getElementById('app');
+    let gameWrapper = document.createElement('div');
 
     let isMobile = false;
     let isLeft = false;
@@ -58,14 +59,18 @@ export const Minesweeper = function() {
     let minesArray = [];
 
     this.initialize = function() {
+
         
         const heading = `Minesweeper v${VERSION}`;
         const headingElement = document.createElement('h1');
         headingElement.innerText = heading;
+
         appElement.append(headingElement, initializeToolbar(), grid);
         generateGrid()
+
         footbar = initializeFootbar();
         appElement.append(footbar);
+        // appElement.append(gameWrapper);
     }
 
     function initializeFootbar() {
@@ -223,6 +228,7 @@ export const Minesweeper = function() {
 
         appElement.style.width = `${grid.offsetWidth + 40}px`;
         appElement.style.margin = '0 auto';
+
 
         timerService.initialize(timerDisplay);
         updateFlagsCountDisplay();
@@ -466,7 +472,6 @@ export const Minesweeper = function() {
             }
         }
         grid.setAttribute('game-status', 'done');
-        timerService.stop();
     }
 
     function handleWinRevelation(cell) {
@@ -551,6 +556,8 @@ export const Minesweeper = function() {
         if (levelComplete && grid.getAttribute('game-status') == 'active') {
             grid.setAttribute('game-status', 'win');
             revealMines();
+            const time = timerService.stop();
+            gameOver(time, 'win');
         }
     }
 
@@ -798,6 +805,8 @@ export const Minesweeper = function() {
 
         if (isMine(cell)) {
             revealMines();
+            const time = timerService.stop();
+            gameOver(time, 'loss');
             flagsDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
