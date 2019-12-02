@@ -71,7 +71,7 @@ export class LeaderBoardService {
 
     send(game, key) {
         if (game.status === 'win' && game[key] < this.lastPlace) {
-            let name = window.prompt('Congrats! Enter your name:');
+            let name = window.prompt('Top performance! Enter your name:');
             if (name) {
                 if (name.length > 10) {
                     name = `${name.slice(0, 10)}...`;
