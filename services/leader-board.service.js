@@ -9,8 +9,9 @@ const user = new UserService();
 
 
 export class LeaderBoardService {
-    constructor(collectionName) {
-        this.leaders = db.collection(collectionName);
+    constructor(leaders, all) {
+        this.leaders = db.collection(leaders);
+        this.all = db.collection(all);
     }
 
     update(level, displayElement, title) {
@@ -74,6 +75,12 @@ export class LeaderBoardService {
     }
 
     send(game, key) {
+        const sessionId = new Date().toDateString().replace(/\s/g, '_');
+        const gameId = new Date().toTimeString().replace(/\s/g, '_');
+        const data = {};
+        data[gameId] = game;
+        this.all.doc(user.browserId).collection('games').doc(sessionId).set(data, {merge: true});
+
         if (game.status === 'win' && game[key] < this.lastPlace) {
             let name = window.prompt('Top performance! Enter your name:');
             if (name) {

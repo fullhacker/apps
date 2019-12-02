@@ -22,7 +22,7 @@ export const Minesweeper = function() {
     const storageService = new StorageService();
     const timerService = new TimerService();
     const loggerService = new LoggerService();
-    const leaderBoard = new LeaderBoardService('mw-leaders');
+    const leaderBoard = new LeaderBoardService('mw-leaders', 'mw-all');
 
     let grid = document.createElement('table');
     grid.setAttribute('id', 'grid');
