@@ -21,7 +21,9 @@ export class TimerService {
 
         this.display = el;
         this.startTime = undefined;
-        this.stop()
+        if (this.id) {
+            this.stop()
+        }
         this.updateDisplay();
     }
 
@@ -39,6 +41,7 @@ export class TimerService {
         this.running = false;
         clearInterval(this.id);
         this.loggerService.debug(`stopped timer id: ${this.id}`);
+        this.id = undefined;
         return this.time;
     }
 

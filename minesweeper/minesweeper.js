@@ -10,17 +10,19 @@ import { StorageService } from '../services/storage.service.js';
 import { TimerService } from '../services/timer.service.js';
 import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
+import { LeaderBoardService } from '../services/leader-board.service.js';
 
 const VERSION = "0.2.0.3";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
 
-export const Minesweeper = function(gameOver) {
+export const Minesweeper = function() {
     const _this = this;
     const storageService = new StorageService();
     const timerService = new TimerService();
     const loggerService = new LoggerService();
+    const leaderBoard = new LeaderBoardService('mw-leaders');
 
     let grid = document.createElement('table');
     grid.setAttribute('id', 'grid');
@@ -31,7 +33,7 @@ export const Minesweeper = function(gameOver) {
     let customWrapper = document.createElement('div');
     customWrapper.setAttribute('id', 'custom-wrapper');
     let appElement = document.getElementById('app');
-    let gameWrapper = document.createElement('div');
+    let leaderWrapper = document.createElement('div');
 
     let isMobile = false;
     let isLeft = false;
@@ -60,17 +62,29 @@ export const Minesweeper = function(gameOver) {
 
     this.initialize = function() {
 
-        
         const heading = `Minesweeper v${VERSION}`;
         const headingElement = document.createElement('h1');
         headingElement.innerText = heading;
 
-        appElement.append(headingElement, initializeToolbar(), grid);
-        generateGrid()
-
+        const gameBoard = document.createElement('div');
+        gameBoard.setAttribute('id', 'game-board');
         footbar = initializeFootbar();
-        appElement.append(footbar);
+        gameBoard.append(initializeToolbar(), grid, footbar);
+
+        appElement.append(headingElement, gameBoard);
+        generateGrid()
         // appElement.append(gameWrapper);
+    }
+
+    function initializeLeaderBoard() {
+        leaderWrapper.innerHTML = '';
+        const leaderHeading = document.createElement('h3');
+        leaderHeading.innerText = `Best Times (${setting.name})`;
+        const leaderList = document.createElement('ol');
+        leaderBoard.update(setting.name, leaderList);
+
+        leaderWrapper.append(leaderHeading, leaderList);
+        appElement.append(leaderWrapper);
     }
 
     function initializeFootbar() {
@@ -229,6 +243,8 @@ export const Minesweeper = function(gameOver) {
         appElement.style.width = `${grid.offsetWidth + 40}px`;
         appElement.style.margin = '0 auto';
 
+
+        initializeLeaderBoard();
 
         timerService.initialize(timerDisplay);
         updateFlagsCountDisplay();
@@ -460,10 +476,10 @@ export const Minesweeper = function(gameOver) {
     function revealMines() {
         if (grid.getAttribute('game-status') == 'done') return;
         //Highlight all mines in red
+        const win = grid.getAttribute('game-status') == 'win';
         for (let i=0; i<setting.rows; i++) {
             for(let j=0; j<setting.cols; j++) {
                 let cell = grid.rows[i].cells[j];
-                const win = grid.getAttribute('game-status') == 'win';
                 if (win) {
                     handleWinRevelation(cell);
                 } else {
@@ -472,6 +488,14 @@ export const Minesweeper = function(gameOver) {
             }
         }
         grid.setAttribute('game-status', 'done');
+
+        const time = timerService.stop();
+        const game = {
+            time,
+            status: win ? 'win' : 'loss',
+            level: setting.name
+        }
+        leaderBoard.send(game, 'time');
     }
 
     function handleWinRevelation(cell) {
@@ -556,10 +580,6 @@ export const Minesweeper = function(gameOver) {
         if (levelComplete && grid.getAttribute('game-status') == 'active') {
             grid.setAttribute('game-status', 'win');
             revealMines();
-            const time = timerService.stop();
-            if (typeof gameOver === 'function') {
-                gameOver(time, 'win');
-            }
         }
     }
 
@@ -807,10 +827,6 @@ export const Minesweeper = function(gameOver) {
 
         if (isMine(cell)) {
             revealMines();
-            const time = timerService.stop();
-            if (typeof gameOver === 'function') {
-                gameOver(time, 'loss');
-            }
             flagsDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
