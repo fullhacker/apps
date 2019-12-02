@@ -38,7 +38,7 @@ export class LeaderBoardService {
         const leaderList = document.createElement('ol');
 
         displayElement.style.maxWidth = '270px';
-        displayElement.style.margin = '0 auto';
+        displayElement.style.margin = '0 auto 30px';
 
         return collection.onSnapshot(list => {
             leaderList.innerHTML = '';
@@ -55,7 +55,7 @@ export class LeaderBoardService {
                         const prettyTime = timerService.pretty(game.data().time);
                         const name = game.data().name || 'Anonymous';
                         const item = document.createElement('li');
-                        item.innerHTML = `#${i+1}: <em>${name}</em> - ${prettyTime}`;
+                        item.innerHTML = `#${i+1}: <em>${name}</em> ${prettyTime}`;
                         leaderList.append(item);
                     }
                 }
