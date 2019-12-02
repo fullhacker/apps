@@ -240,7 +240,7 @@ export const Minesweeper = function() {
         gameStatus.value = 'inactive';
         grid.setAttributeNode(gameStatus);
 
-        appElement.style.minWidth = '300px';
+        appElement.style.minWidth = '230px';
         appElement.style.width = `${grid.offsetWidth + 40}px`;
         appElement.style.margin = '0 auto';
 
