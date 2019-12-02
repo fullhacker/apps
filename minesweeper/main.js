@@ -9,8 +9,6 @@
 import { Minesweeper } from './minesweeper.js';
 import { DialogService } from '../services/dialog.service.js';
 
-/** app config variables **/
-//Turn this variable to true to see where the mines are
 var myMinesweeper = new Minesweeper((time, status) => console.log(time, status));
 
 /** initialize the dialog service **/

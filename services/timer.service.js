@@ -28,11 +28,13 @@ export class TimerService {
         this.running = true;
         this.startTime = new Date().getTime();
         this.id = window.setInterval(() => this.updateDisplay(), INTERVAL);
+        console.log('start' + this.id);
     }
 
     stop() {
         this.running = false;
         clearInterval(this.id);
+        console.log('stop' + this.id);
         return this.time;
     }
 

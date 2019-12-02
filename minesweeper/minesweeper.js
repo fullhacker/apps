@@ -557,7 +557,9 @@ export const Minesweeper = function(gameOver) {
             grid.setAttribute('game-status', 'win');
             revealMines();
             const time = timerService.stop();
-            gameOver(time, 'win');
+            if (typeof gameOver === 'function') {
+                gameOver(time, 'win');
+            }
         }
     }
 
@@ -806,7 +808,9 @@ export const Minesweeper = function(gameOver) {
         if (isMine(cell)) {
             revealMines();
             const time = timerService.stop();
-            gameOver(time, 'loss');
+            if (typeof gameOver === 'function') {
+                gameOver(time, 'loss');
+            }
             flagsDisplay.innerHTML = '&#128561;';
             grid.setAttribute('game-status', 'over');
         } else {
