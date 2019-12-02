@@ -64,6 +64,10 @@ export class LeaderBoardService {
                 }
 
                 displayElement.append(leaderHeading, leaderList);
+            } else {
+                const message = document.createElement('em');
+                message.innerText = 'Be the first to the top!';
+                displayElement.append(leaderHeading, message);
             }
         });
 
