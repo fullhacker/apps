@@ -20,6 +20,9 @@ body {
   text-align: center;
 }
 
+em {
+  font-weight: bold;
+}
 h1 {
   text-align: center;
   font-size: 24px;

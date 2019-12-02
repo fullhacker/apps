@@ -32,23 +32,30 @@ export class LeaderBoardService {
         displayElement.innerHTML = '';
         const leaderHeading = document.createElement('h3');
         leaderHeading.innerText = title;
+        leaderHeading.style.borderBottom = '1px solid #c0c0c0';
+        leaderHeading.style.paddingBottom = '10px';
 
         const leaderList = document.createElement('ol');
 
+        displayElement.style.maxWidth = '270px';
+        displayElement.style.margin = '0 auto';
 
         return collection.onSnapshot(list => {
             leaderList.innerHTML = '';
             leaderList.style.listStyle = 'none';
+            leaderList.style.textAlign = 'left';
             leaderList.style.marginLeft = '-40px';
+            leaderList.style.marginTop = '-15px';
+
             const docs = list.docs;
             if (docs && docs.length) {
                 for (let i = 0; i < 10; i++) {
                     const game = docs[i];
                     if (game) {
                         const prettyTime = timerService.pretty(game.data().time);
-                        const name = game.data().name || '';
+                        const name = game.data().name || 'Anonymous';
                         const item = document.createElement('li');
-                        item.innerText = `#${i+1}: ${name} - ${prettyTime}`;
+                        item.innerHTML = `#${i+1}: <em>${name}</em> - ${prettyTime}`;
                         leaderList.append(item);
                     }
                 }
@@ -64,7 +71,7 @@ export class LeaderBoardService {
 
     send(game, key) {
         if (game.status === 'win' && game[key] < this.lastPlace) {
-            let name = window.prompt('Enter your name:');
+            let name = window.prompt('Congrats! Enter your name:');
             if (name) {
                 if (name.length > 10) {
                     name = `${name.slice(0, 10)}...`;
