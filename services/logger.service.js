@@ -5,17 +5,4 @@
     Blog: FullHacker.com
     Live: games.fullhacker.com/minesweeper
 */
-
-export class LoggerService {
-    debug(message, data) {
-        if (typeof message === 'string') {
-            if (data) {
-                console.log(message, data);
-            } else {
-                console.log(message);
-            }
-        } else {
-            console.warn(`LoggerService.debug expects a string as first parameter but got a ${typeof message}`, message);
-        }
-    }
-}
+export class LoggerService{debug(e,o){"string"==typeof e?o?console.log(e,o):console.log(e):console.warn(`LoggerService.debug expects a string as first parameter but got a ${typeof e}`,e)}};
