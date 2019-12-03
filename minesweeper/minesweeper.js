@@ -62,6 +62,7 @@ export const Minesweeper = function() {
 
     this.initialize = function() {
 
+        appElement.innerHTML = '';
         const heading = `Minesweeper v${VERSION}`;
         const headingElement = document.createElement('h1');
         headingElement.innerText = heading;
