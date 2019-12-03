@@ -6,6 +6,7 @@ const dbService = new DatabaseService();
 const timerService = new TimerService();
 const db = dbService.store;
 const user = new UserService();
+let previousLevel;
 
 
 export class LeaderBoardService {
@@ -15,13 +16,14 @@ export class LeaderBoardService {
     }
 
     update(level, displayElement, title) {
-        if (level) {
+        if (level !== previousLevel) {
+            previousLevel = level;
             if (this.unsubscribe) {
                 this.unsubscribe();
             }
             this.lastPlace = Number.MAX_SAFE_INTEGER;
             this.topList = this.leaders.doc(level)
-                .collection('games').orderBy('time');
+                .collection('games').orderBy('time').limit(10);
             this.unsubscribe = this.setListener(this.topList, displayElement, title);
         }
 
@@ -50,16 +52,16 @@ export class LeaderBoardService {
 
             const docs = list.docs;
             if (docs && docs.length) {
-                for (let i = 0; i < 10; i++) {
-                    const game = docs[i];
+                let i = 1;
+                docs.forEach(game => {
                     if (game) {
                         const prettyTime = timerService.pretty(game.data().time);
                         const name = game.data().name || 'Anonymous';
                         const item = document.createElement('li');
-                        item.innerHTML = `#${i+1}: <em>${name}</em> ${prettyTime}`;
+                        item.innerHTML = `#${i++}: <em>${name}</em> ${prettyTime}`;
                         leaderList.append(item);
                     }
-                }
+                })
                 if (list.docs.length >= 10) {
                     this.lastPlace = list.docs[9].data().time;
                 }
