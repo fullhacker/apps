@@ -198,8 +198,18 @@ p.announcement-action {
   font-weight: bold;
 }
 
+#body-wrapper {
+  display: inline-block;
+}
+
+.btn-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
+
 /** mobile **/
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 767px) {
   #grid tr td {
     width: 20px;
     height: 20px;
@@ -207,6 +217,9 @@ p.announcement-action {
     max-height: 20px;
     min-width: 20px;
     min-height: 20px;
+  }
+  .btn-container {
+    position: inherit;
   }
 }
 
