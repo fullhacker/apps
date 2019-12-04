@@ -41,7 +41,7 @@ export class LeaderBoardService {
         const leaderList = document.createElement('ol');
 
         displayElement.style.maxWidth = '270px';
-        displayElement.style.margin = '0 auto 30px';
+        displayElement.style.margin = '0 auto';
 
         return collection.onSnapshot(list => {
             leaderList.innerHTML = '';
