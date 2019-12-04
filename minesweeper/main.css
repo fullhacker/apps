@@ -220,6 +220,7 @@ p.announcement-action {
   }
   .btn-container {
     position: inherit;
+    margin: 20px 0;
   }
 }
 
