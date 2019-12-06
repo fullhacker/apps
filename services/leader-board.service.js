@@ -83,12 +83,11 @@ export class LeaderBoardService {
         displayElement.style.maxWidth = '270px';
         displayElement.style.margin = '0 auto';
 
-        const leaderList = document.createElement('ol');
+        const leaderList = document.createElement('div');
 
         leaderList.innerHTML = '';
         leaderList.style.listStyle = 'none';
         leaderList.style.textAlign = 'left';
-        leaderList.style.marginLeft = '-40px';
         leaderList.style.marginTop = '-15px';
 
         if (docs && docs.length) {
@@ -97,8 +96,26 @@ export class LeaderBoardService {
                 if (game) {
                     const prettyTime = timerService.pretty(game.data().time);
                     const name = game.data().name || 'Anonymous';
-                    const item = document.createElement('li');
-                    item.innerHTML = `#${i++}: <em>${name}</em> ${prettyTime}`;
+                    const item = document.createElement('div');
+                    item.style.display = 'flex';
+                    const nameElement =document.createElement('div'); // `<span class="ellipsis" title="${name}">${name}</span>` ;
+                    nameElement.innerHTML = name;
+                    nameElement.setAttribute('title', name);
+                    nameElement.style.textOverflow = 'ellipsis';
+                    nameElement.style.whiteSpace = 'nowrap';
+                    nameElement.style.overflow = 'hidden';
+                    nameElement.style.padding = '0 5px';
+                    nameElement.style.cursor = 'pointer';
+                    nameElement.style.fontWeight = 'bold';
+                    nameElement.style.fontStyle = 'italic';
+
+                    const indexElement = document.createElement('div');
+                    indexElement.innerText = `#${i++}`;
+                    
+                    const timeElement = document.createElement('div');
+                    timeElement.innerText = prettyTime;
+
+                    item.append(indexElement, nameElement, timeElement);
                     leaderList.append(item);
                 }
             })

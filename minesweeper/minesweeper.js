@@ -15,7 +15,7 @@ import { LeaderBoardService } from '../services/leader-board.service.js';
 const VERSION = "0.3.1";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
-const TEST_MODE = false;
+const TEST_MODE = true;
 
 export const Minesweeper = function() {
     const _this = this;
@@ -56,6 +56,14 @@ export const Minesweeper = function() {
     let clickedCell;
     let cachedSetting = storageService.getFromLocal('setting');
     let setting = cachedSetting || levels.beginner;
+    if (TEST_MODE) {
+        setting = {
+            rows: 10,
+            cols: 10,
+            mines: 10,
+            name: 'test'
+        }
+    }
     storageService.saveToLocal('setting', setting);
     let flagsCount = setting.mines;
     let minesArray = [];
@@ -69,8 +77,8 @@ export const Minesweeper = function() {
 
         const gameBoard = document.createElement('div');
         gameBoard.setAttribute('id', 'game-board');
-        footbar = initializeFootbar();
-        gameBoard.append(initializeToolbar(), grid, footbar);
+
+        gameBoard.append(initializeToolbar(), grid, initializeFootbar());
 
         appElement.append(headingElement, gameBoard);
         generateGrid()
@@ -111,8 +119,16 @@ export const Minesweeper = function() {
         customOption.value = 'custom';
         customOption.text = 'Custom';
         // levelsDropdown.add(customOption);
+        if (TEST_MODE) {
+            const testLevel = document.createElement('span');
+            testLevel.innerText = 'Test Mode';
+            footBar.append(testLevel);
+        } else {
 
-        footBar.append(levelsDropdown);
+            footBar.append(levelsDropdown);
+        }
+
+
 
         return footBar;
     }
