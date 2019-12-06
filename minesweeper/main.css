@@ -28,6 +28,9 @@ h1 {
   font-size: 24px;
   font-weight: bold;
   text-transform: uppercase;
+  background: -webkit-linear-gradient(90deg,#ff8a00,#e52e71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 #grid {
@@ -220,6 +223,7 @@ p.announcement-action {
   }
   .btn-container {
     position: inherit;
+    margin: 20px 0;
   }
 }
 
