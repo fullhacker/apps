@@ -210,7 +210,7 @@ export const Minesweeper = function() {
 
         //generate 10 by 10 grid
         firstClick = true;
-        grid.innerHTML="";
+        grid.innerHTML = '';
         grid.oncontextmenu = () => false;
         flagsCount = setting.mines;
         minesArray = [];
