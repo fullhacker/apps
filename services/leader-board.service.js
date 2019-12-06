@@ -122,6 +122,10 @@ export class LeaderBoardService {
         const sessionId = new Date().toDateString().replace(/\s/g, '_');
         const gameId = new Date().toTimeString().replace(/\s/g, '_');
         const data = {};
+        game = {
+            time_stamp: new Date(),
+            ...game
+        }
         data[gameId] = game;
         this.all.doc(user.browserId).collection('games').doc(sessionId).set(data, {merge: true});
 
@@ -134,7 +138,6 @@ export class LeaderBoardService {
             const newGame = {
                 name,
                 browserId: user.browserId,
-                time_stamp: new Date(),
                 ...game
             }
 
