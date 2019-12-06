@@ -1,9 +1,11 @@
 import { DatabaseService } from "./db.service.js";
 import { TimerService } from "./timer.service.js";
 import { UserService } from "./user.service.js";
+import { LoadingService } from "./loading/loading.js";
 
 const dbService = new DatabaseService();
 const timerService = new TimerService();
+const loadingService = new LoadingService();
 const db = dbService.store;
 const user = new UserService();
 let previousLevel;
@@ -55,6 +57,7 @@ export class LeaderBoardService {
 
     update(level, displayElement, title) {
         if (level !== previousLevel) {
+            loadingService.addLoading(displayElement);
             previousLevel = level;
             if (this.unsubscribe) {
                 this.unsubscribe();
@@ -67,7 +70,7 @@ export class LeaderBoardService {
 
     }
 
-    setListener(collection, displayElement, title) {
+    renderList(displayElement, title, docs) {
         if (!displayElement) return;
 
         displayElement.innerHTML = '';
@@ -76,42 +79,43 @@ export class LeaderBoardService {
         leaderHeading.style.borderBottom = '1px solid #c0c0c0';
         leaderHeading.style.paddingBottom = '10px';
 
-        const leaderList = document.createElement('ol');
 
         displayElement.style.maxWidth = '270px';
         displayElement.style.margin = '0 auto';
 
-        return collection.onSnapshot(list => {
-            leaderList.innerHTML = '';
-            leaderList.style.listStyle = 'none';
-            leaderList.style.textAlign = 'left';
-            leaderList.style.marginLeft = '-40px';
-            leaderList.style.marginTop = '-15px';
+        const leaderList = document.createElement('ol');
 
-            const docs = list.docs;
-            if (docs && docs.length) {
-                let i = 1;
-                docs.forEach(game => {
-                    if (game) {
-                        const prettyTime = timerService.pretty(game.data().time);
-                        const name = game.data().name || 'Anonymous';
-                        const item = document.createElement('li');
-                        item.innerHTML = `#${i++}: <em>${name}</em> ${prettyTime}`;
-                        leaderList.append(item);
-                    }
-                })
-                if (list.docs.length >= 10) {
-                    this.lastPlace = list.docs[9].data().time;
+        leaderList.innerHTML = '';
+        leaderList.style.listStyle = 'none';
+        leaderList.style.textAlign = 'left';
+        leaderList.style.marginLeft = '-40px';
+        leaderList.style.marginTop = '-15px';
+
+        if (docs && docs.length) {
+            let i = 1;
+            docs.forEach(game => {
+                if (game) {
+                    const prettyTime = timerService.pretty(game.data().time);
+                    const name = game.data().name || 'Anonymous';
+                    const item = document.createElement('li');
+                    item.innerHTML = `#${i++}: <em>${name}</em> ${prettyTime}`;
+                    leaderList.append(item);
                 }
-
-                displayElement.append(leaderHeading, leaderList);
-            } else {
-                const message = document.createElement('em');
-                message.innerText = 'Be the first to the top!';
-                displayElement.append(leaderHeading, message);
+            })
+            if (docs.length >= 10) {
+                this.lastPlace = docs[9].data().time;
             }
-        });
 
+            displayElement.append(leaderHeading, leaderList);
+        } else {
+            const message = document.createElement('em');
+            message.innerText = 'Be the first to the top!';
+            displayElement.append(leaderHeading, message);
+        }
+    }
+
+    setListener(collection, displayElement, title) {
+        return collection.onSnapshot(list => this.renderList(displayElement, title, list.docs));
     }
 
     send(game, key) {
