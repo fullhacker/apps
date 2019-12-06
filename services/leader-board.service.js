@@ -134,6 +134,7 @@ export class LeaderBoardService {
             const newGame = {
                 name,
                 browserId: user.browserId,
+                time_stamp: new Date(),
                 ...game
             }
 
