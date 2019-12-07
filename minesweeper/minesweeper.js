@@ -733,7 +733,7 @@ export const Minesweeper = function() {
                 cell.className = 'flag';
                 decreaseFlagsCount();
                 setStatus(cell, 'flagged');
-                if (isMobile) {
+                if (isMobile && 'vibrate' in navigator) {
                     navigator.vibrate(100);
                 }
             } else {
