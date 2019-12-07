@@ -12,7 +12,7 @@ import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 import { LeaderBoardService } from '../services/leader-board.service.js';
 
-const VERSION = "0.3.2";
+const VERSION = "0.3.3";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
@@ -510,6 +510,13 @@ export const Minesweeper = function() {
             level: setting.name
         }
         leaderBoard.send(game, 'time');
+        // send google analytics event
+        if (gtag) {
+            gtag('event', 'mw-event', {
+                'event_category' : 'mw-game',
+                'event_label' : 'end-game'
+            });
+        }
     }
 
     function handleWinRevelation(cell) {
@@ -668,6 +675,13 @@ export const Minesweeper = function() {
         grid.setAttribute('game-status', 'active');
         // start timer
         timerService.start();
+        // send google analytics event
+        if (gtag) {
+            gtag('event', 'mw-event', {
+                'event_category' : 'mw-game',
+                'event_label' : 'start-game'
+            });
+        }
     }
 
     function gameIsDone() {
