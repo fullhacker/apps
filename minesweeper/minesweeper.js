@@ -733,13 +733,13 @@ export const Minesweeper = function() {
                 cell.className = 'flag';
                 decreaseFlagsCount();
                 setStatus(cell, 'flagged');
-                if (isMobile && 'vibrate' in navigator) {
-                    navigator.vibrate(100);
-                }
-            } else {
+           } else {
                 cell.className = '';
                 increaseFlagsCount();
                 setStatus(cell, 'default');
+            }
+            if (isMobile && 'vibrate' in navigator) {
+                navigator.vibrate(100);
             }
             if (TEST_MODE) loggerService.debug('right click', cell);
         }
