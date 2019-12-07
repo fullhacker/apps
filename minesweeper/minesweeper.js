@@ -12,7 +12,7 @@ import { LoggerService } from '../services/logger.service.js';
 import { levels } from './levels.js';
 import { LeaderBoardService } from '../services/leader-board.service.js';
 
-const VERSION = "0.3.3";
+const VERSION = "0.3.4";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
@@ -729,6 +729,9 @@ export const Minesweeper = function() {
                 cell.className = 'flag';
                 decreaseFlagsCount();
                 setStatus(cell, 'flagged');
+                if (isMobile) {
+                    navigator.vibrate();
+                }
             } else {
                 cell.className = '';
                 increaseFlagsCount();
