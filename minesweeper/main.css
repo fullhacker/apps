@@ -58,7 +58,7 @@ h1 {
   min-height: 15px;
   text-align: center;
   font-size: xx-small;
-  cursor: default !important;
+  cursor: pointer;
   padding: 0px;
   background: #c0d0c0;
   border: 1px solid #c0c0c0;
@@ -69,6 +69,7 @@ h1 {
 #grid TR TD[data-status=flagged] {
   border: 1px outset #ececec;
   padding: 0px;
+  cursor: default;
 }
 
 #grid TR TD.mine {
