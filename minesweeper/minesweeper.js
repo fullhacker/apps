@@ -734,7 +734,7 @@ export const Minesweeper = function() {
                 decreaseFlagsCount();
                 setStatus(cell, 'flagged');
                 if (isMobile) {
-                    navigator.vibrate(MOBILE_BUSY_DELAY);
+                    navigator.vibrate(100);
                 }
             } else {
                 cell.className = '';
