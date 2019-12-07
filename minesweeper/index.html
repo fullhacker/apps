@@ -20,6 +20,11 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'UA-113797180-1');
+
+        gtag('event', 'ab-test', {
+            'event_category' : 'cell-cursor',
+            'event_label' : 'test-a'
+        });
     </script>
 
     <link rel="stylesheet" href="/minesweeper/main.css" />
