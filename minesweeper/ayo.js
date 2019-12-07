@@ -1,5 +1,7 @@
-// import { LeaderBoardService } from '../services/leader-board.service.js';
+import { LeaderBoardService } from '../services/leader-board.service.js';
 
-// const leaderBoard = new LeaderBoardService('mw-leaders', 'mw-all');
+const leaderBoard = new LeaderBoardService('mw-leaders', 'mw-all');
 
-// leaderBoard.updateTimeStamps();
+window.updateLeaders = () => {
+    leaderBoard.updateTimeStampsLeaders();
+}
