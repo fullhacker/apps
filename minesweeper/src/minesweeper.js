@@ -267,11 +267,15 @@ export const Minesweeper = function() {
 
     function setBusy() {
         isBusy = true;
+        setTimeout(() => isBusy = false, getDelay());
+    }
+
+    function getDelay() {
+        let delay = PC_BUSY_DELAY;
         if (isMobile) {
-            setTimeout(() => isBusy = false, MOBILE_BUSY_DELAY);
-        } else {
-            setTimeout(() => isBusy = false, PC_BUSY_DELAY);
+            delay = MOBILE_BUSY_DELAY;
         }
+        return delay;
     }
 
     function updateFlagsCountDisplay(count = flagsCount) {
@@ -729,10 +733,13 @@ export const Minesweeper = function() {
                 cell.className = 'flag';
                 decreaseFlagsCount();
                 setStatus(cell, 'flagged');
-            } else {
+           } else {
                 cell.className = '';
                 increaseFlagsCount();
                 setStatus(cell, 'default');
+            }
+            if (isMobile && 'vibrate' in navigator) {
+                navigator.vibrate(100);
             }
             if (TEST_MODE) loggerService.debug('right click', cell);
         }
