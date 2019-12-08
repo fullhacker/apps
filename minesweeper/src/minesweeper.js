@@ -6,13 +6,13 @@
     Live: games.fullhacker.com/minesweeper
 */
 
-import { StorageService } from '../services/storage.service.js';
-import { TimerService } from '../services/timer.service.js';
-import { LoggerService } from '../services/logger.service.js';
+import { StorageService } from '../../services/storage.service.js';
+import { TimerService } from '../../services/timer.service.js';
+import { LoggerService } from '../../services/logger.service.js';
+import { LeaderBoardService } from '../../services/leader-board.service.js';
 import { levels } from './levels.js';
-import { LeaderBoardService } from '../services/leader-board.service.js';
 
-const VERSION = "0.3.3";
+const VERSION = "0.3.6";
 const MOBILE_BUSY_DELAY = 250;
 const PC_BUSY_DELAY = 500;
 const TEST_MODE = false;
