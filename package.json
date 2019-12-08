@@ -4,8 +4,10 @@
   "description": "Games by Full Hacker",
   "main": "index.js",
   "scripts": {
-    "start": "http-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "http-server .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:dev": "node node_modules/webpack/bin/webpack.js --watch --mode development minesweeper/src/index.js",
+    "buildprod": "node node_modules/webpack/bin/webpack.js minesweeper/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,10 @@
   },
   "homepage": "https://github.com/fullhacker/games#readme",
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "webpack": "^4.41.2"
   }
 }

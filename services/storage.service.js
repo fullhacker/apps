@@ -5,4 +5,27 @@
     Blog: FullHacker.com
     Live: games.fullhacker.com/minesweeper
 */
-export class StorageService{constructor(){}saveToLocal(e,t){localStorage.setItem(e,JSON.stringify(t))}saveToSession(e,t){sessionStorage.setItem(e,JSON.stringify(t))}getFromLocal(e){const t=localStorage.getItem(e);if("undefined"!==t)return JSON.parse(t)}getFromSession(e){const t=sessionStorage.getItem(e);if("undefined"!==t)return JSON.parse(t)}};
+
+export class StorageService {
+
+    constructor() {
+    }
+    
+    saveToLocal(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    saveToSession(key, value) {
+        sessionStorage.setItem(key, JSON.stringify(value));
+    }
+
+    getFromLocal(key) {
+        const data = localStorage.getItem(key);
+        if (data !== 'undefined') return JSON.parse(data);
+    }
+
+    getFromSession(key) {
+        const data = sessionStorage.getItem(key);
+        if (data !== 'undefined') return JSON.parse(data);
+    }
+}
